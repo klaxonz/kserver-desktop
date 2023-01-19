@@ -1,77 +1,40 @@
-import request from '../plugins/request'
-import config from '../config/index'
-import { pa } from 'element-plus/es/locale'
+import request from '../plugins/index'
 
 export const webpageApi = {
     add: (data: any) => {
-        return request({
-            url: `${config.url}/webpage/add/`,
-            method: 'post',
-            data
-        })
+        return request.post('webpage/add', data)
     },
     addTag: (data: any) => {
-        return request({
-            url: `${config.url}/webpage/addTag`,
-            method: 'post',
-            data
-        })
+        return request.post('webpage/addTag', data)
     },
     removeTag: (data: any) => {
-        return request({
-            url: `${config.url}/webpage/removeTag`,
-            method: 'post',
-            data
-        })
+        return request.post('webpage/removeTag', data)
     },
     changeGroup: (data: any) => {
-        return request({
-            url: `${config.url}/webpage/changeGroup`,
-            method: 'post',
-            data
-        })
+        return request.post('webpage/changeGroup', data)
     },
     remove: (data: any) => {
-        return request({
-            url: `${config.url}/webpage/remove`,
-            method: 'post',
-            data
-        })
+        return request.post('webpage/remove', data)
+    },
+    batchRemove: (data: any) => {
+        return request.post('webpage/batchRemove', data)
     },
     get: (id: number) => {
-        return request({
-            url: `${config.url}/webpage/get/${id}`,
-            method: 'get'
-        })
+        return request.get(`webpage/get/${id}`)
     },
     detail: () => {
-        return request({
-            url: `${config.url}/webpage/detail`,
-            method: 'get'
-        })
+        return request.get('webpage/detail')
     },
     getAll: (page: number) => {
-        return request({
-            url: `${config.url}/webpage/list/all/${page}`,
-            method: 'get'
-        })
+        return request.get( `webpage/list/all/${page}`)
     },
     getStar: (page: number) => {
-        return request({
-            url: `${config.url}/webpage/list/star/${page}`,
-            method: 'get'
-        })
+        return request.get(`webpage/list/star/${page}`)
     },
     getToday: (page: number) => {
-        return request({
-            url: `${config.url}/webpage/list/today/${page}`,
-            method: 'get'
-        })
+        return request.get(`webpage/list/today/${page}`)
     },
-    search: (type: string, q: string, page: number) => {
-        return request({
-            url: `${config.url}/webpage/search?type=${type}&q=${q}&page=${page}`,
-            method: 'get'
-        })
+    search: (q: string, page: number, type?: string) => {
+        return request.get(`webpage/search?type=${type}&q=${q}&page=${page}`)
     },
 }

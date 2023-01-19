@@ -1,4 +1,4 @@
-import { app, BrowserWindow, shell, ipcMain } from 'electron'
+import { app, BrowserWindow, shell, ipcMain, session } from 'electron'
 import { release } from 'os'
 import { join } from 'path'
 
@@ -43,6 +43,7 @@ async function createWindow() {
       webSecurity: false,
       nodeIntegration: true,
       contextIsolation: false,
+      webviewTag: true
     },
   })
 
@@ -66,7 +67,9 @@ async function createWindow() {
   })
 }
 
-app.whenReady().then(createWindow)
+app.whenReady().then(createWindow).then(async () => {
+  await session.defaultSession.loadExtension('C:\\Users\\MSN\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\6.4.5_0')
+})
 
 app.on('window-all-closed', () => {
   win = null

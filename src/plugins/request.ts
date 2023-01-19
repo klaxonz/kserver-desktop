@@ -1,9 +1,8 @@
 import axios from 'axios'
-import { config } from 'yargs'
 
 const service = axios.create({
     baseURL: '/',
-    timeout: 5000
+    timeout: 10000
 })
 
 service.interceptors.request.use(

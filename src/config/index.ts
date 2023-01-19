@@ -7,9 +7,9 @@ const config:Config = {
 }
 
 if (process.env.NODE_ENV === 'production') {
-    config.url = 'http://localhost:9323'
+    config.url = 'http://localhost:9001'
 } else {
-    config.url = 'http://localhost:9323'
+    config.url = 'http://localhost:9001'
 }
 
 export default config

@@ -1,29 +1,21 @@
 <template>
-    <div class="flex flex-row h-full">
+    <div class="flex flex-row h-full" style="font-family: PingFang SC,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji">
         <div class="w-80px bg-gray-200">
             <div class="container mt-5">
-                <div
-                    class="h-48px w-60px mx-auto mb-2 flex justify-center items-center hover:bg-gray-300 cursor-pointer rounded-md"
-                        :class="{'bg-gray-300': state.activeSide === 'favorite'}"
-                    >
+                <div class="h-48px w-60px mx-auto mb-2 flex justify-center items-center hover:bg-gray-300 cursor-pointer rounded-md"
+                    :class="{'bg-gray-300': state.activeSide === 'favorite'}">
                     <div>收藏</div>
                 </div>
-                <div
-                    class="h-48px w-60px mx-auto mb-2 flex justify-center items-center hover:bg-gray-300 cursor-pointer rounded-md"
-                        :class="{'bg-gray-300': state.activeSide === 'tag'}"
-                    >
+                <div class="h-48px w-60px mx-auto mb-2 flex justify-center items-center hover:bg-gray-300 cursor-pointer rounded-md"
+                    :class="{'bg-gray-300': state.activeSide === 'tag'}">
                     <div>标签</div>
                 </div>
-                <div
-                    class="h-48px w-60px mx-auto mb-2 flex justify-center items-center hover:bg-gray-300 cursor-pointer rounded-md"
-                        :class="{'bg-gray-300': state.activeSide === 'mark'}"
-                    >
+                <div class="h-48px w-60px mx-auto mb-2 flex justify-center items-center hover:bg-gray-300 cursor-pointer rounded-md"
+                    :class="{'bg-gray-300': state.activeSide === 'mark'}">
                     <div>标注</div>
                 </div>
-                <div
-                    class="h-48px w-60px mx-auto mb-2 flex justify-center items-center hover:bg-gray-300 cursor-pointer rounded-md"
-                        :class="{'bg-gray-300': state.activeSide === 'archive'}"
-                    >
+                <div class="h-48px w-60px mx-auto mb-2 flex justify-center items-center hover:bg-gray-300 cursor-pointer rounded-md"
+                    :class="{'bg-gray-300': state.activeSide === 'archive'}">
                     <div>归档</div>
                 </div>
             </div>
@@ -36,39 +28,16 @@
                 </div>
                 <div class="mt-5">
                     <div>
-                        <div class="h-40px bg-gray-200  rounded-lg mb-2 cursor-pointer"
-                            :class="{'bg-blue-600': state.active==='all', 'text-light-100': state.active==='all'}"
-                            @click="handleClickAll">
+                        <div v-for="nav in navState"
+                            class="h-40px bg-gray-200  rounded-lg mb-2 cursor-pointer"
+                            :class="{'bg-blue-500': activeNav.type===nav.type, 'text-light-100': activeNav.type===nav.type}"
+                            @click="handleNav(nav.type)">
                             <div class="h-full flex justify-between ml-5 mr-5">
                                 <div class="h-full flex justify-center items-center">
-                                    <div>所有</div>
+                                    {{nav.name}}
                                 </div>
                                 <div class="h-full flex justify-center items-center">
-                                    <div>{{state.allTotal}}</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="h-40px bg-gray-200  rounded-lg mb-2 cursor-pointer"
-                            :class="{'bg-blue-600': state.active==='star', 'text-light-100': state.active==='star'}"
-                            @click="handleClickStar">
-                            <div class="h-full flex justify-between ml-5 mr-5">
-                                <div class="h-full flex justify-center items-center">
-                                    <div>星标</div>
-                                </div>
-                                <div class="h-full flex justify-center items-center">
-                                    <div>{{state.starTotal}}</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="h-40px bg-gray-200  rounded-lg mb-2 cursor-pointer"
-                            :class="{'bg-blue-600': state.active==='today', 'text-light-100': state.active==='today'}"
-                            @click="handleClickToday">
-                            <div class="h-full flex justify-between ml-5 mr-5">
-                                <div class="h-full flex justify-center items-center">
-                                    <div>今日</div>
-                                </div>
-                                <div class="h-full flex justify-center items-center">
-                                    <div>{{state.todayTotal}}</div>
+                                    <div>{{nav.nums}}</div>
                                 </div>
                             </div>
                         </div>
@@ -76,63 +45,93 @@
                 </div>
             </div>
         </div>
-        <div class="bg-gray-100 flex-1 border-gray-200 border-solid border">
+        <div class="flex-1 border-gray-200 border-solid border" style="background-color: #edeff3">
             <div class="h-full ml-5 mr-5 mt-5 flex flex-col">
                 <div class="flex justify-between">
                     <div>
-                        <input v-model="state.searchText" 
+                        <el-input
+                            v-model="state.searchText"
+                            class="h-36px w-500px rounded-md pl-2 outline-gray-200"
                             @keyup.enter.native='handleClickSearch'
-                            class="h-36px w-500px rounded-md pl-2 outline-gray-200" type="text" placeholder="搜索" />
-                        <el-button type="primary" class="ml-2 h-36px" @click="handleClickSearch" >搜索</el-button>
+                            placeholder="搜索"
+                            >
+                            <template #prepend>
+                                <el-button :icon="Search" />
+                            </template>
+                        </el-input>
                     </div>
                     <div>
-                        <button @click="showAddWebPageUrlModal()"
-                            class="bg-gray-400 w-72px h-36px rounded-lg">添加</button>
+                        <el-button class="h-full" type="primary" :icon="CirclePlusFilled" @click="showAddWebPageUrlModal()"/>
                     </div>
                 </div>
                 <div class="mt-8 ">
-                    <div class="flex justify-between">
-                        <div class="font-semibold text-md">收集箱</div>
-                        <div>筛选</div>
+                    <div class="flex justify-between items-center h-32px">
+                        <div class="flex justify-between items-center">
+                            <div v-if="state.checkAllVisible" >
+                                <el-checkbox v-model="state.checkAll" />
+                            </div>
+                            <div class="font-semibold text-md ml-8px">{{activeNav.name}}</div>
+                            <div v-if="state.checkAllVisible" class="font-semibold text-md ml-8px text-gray-500">
+                                已选择{{state.checkNum}}项
+                            </div>
+                        </div>
+
+                        <div v-if="state.checkAllVisible">
+                            <el-dropdown class="mr-4px">
+                                <el-button class="bg-opacity-25" type="primary" :icon="More"></el-button>
+                                <template #dropdown>
+                                  <el-dropdown-menu>
+                                    <el-dropdown-item><el-icon><Star /></el-icon>星标</el-dropdown-item>
+                                    <el-dropdown-item @click="batchDeleteWebpageCard()"><el-icon><Delete /></el-icon>删除</el-dropdown-item>
+                                  </el-dropdown-menu>
+                                </template>
+                            </el-dropdown>
+                            <el-button type="primary" :icon="CircleClose" @click="handleExitMoreOption()">退出多选操作</el-button>
+                        </div>
                     </div>
                 </div>
                 <div class="mt-5 h-screen flex-1" style="overflow-x: scroll;" @scroll="handleScroll">
                     <div class="grid "
                         style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); grid-gap: 20px 20px;">
-                        <el-dropdown class="h-200px bg-light-100 rounded-2xl cursor-pointer hover:shadow-md"
-                            trigger="contextmenu" placement="top-end" v-for="webpageInfo in state.webpageInfos">
-                            <div @click="openUrl($event, webpageInfo.url)" class="h-full w-full">
-                                <div class="h-full flex-col">
-                                    <div class="h-4/5">
-                                        <div class="pl-4 pr-8 pt-3">
-                                            <div class="text-base font-medium"
-                                                style="word-wrap: break-word; word-break:break-all; overflow:hidden; text-overflow: -o-ellipsis-lastline;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;line-clamp: 2;-webkit-box-orient: vertical;">
-                                                {{webpageInfo.title}}</div>
-                                            <div class="text-xs text-gray-600 mt-2"
-                                                style="word-wrap: break-word; word-break:break-all; overflow:hidden; text-overflow: -o-ellipsis-lastline;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 5;line-clamp: 5;-webkit-box-orient: vertical;">
-                                                {{webpageInfo.description}}</div>
+                        <div class="h-200px  rounded-2xl cursor-pointer hover:shadow-md  "
+                            :class="{'border-blue-400': webpage.checked, 'border-r-3px': webpage.checked, 'bg-blue-400': webpage.checked,
+                                 'bg-opacity-25': webpage.checked, 'bg-light-100': !webpage.checked}"
+                             @click.right="handleCardRightClick($event, webpage.id)"  @click.left="handleCardLeftClick($event, webpage.id)"
+                             @mouseenter="handleCardMouseEnter($event, webpage.id)"
+                             @mouseleave="handleCardMouseLeave($event, webpage.id)"
+                             v-on-click-outside="closeContentMenu"
+                             v-for="webpage in webpageInfo.records">
+                                <div class="h-full w-full">
+                                    <div class="h-full flex-col">
+                                        <div class="h-168px flex justify-between">
+                                            <div class="pl-4 pr-4 pt-3">
+                                                <div class="text-base font-medium"
+                                                    style="word-wrap: break-word; word-break:break-all; overflow:hidden; text-overflow: -o-ellipsis-lastline;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;line-clamp: 2;-webkit-box-orient: vertical;">
+                                                    {{webpage.title}}
+                                                </div>
+                                                <div class="text-xs text-gray-600 mt-2"
+                                                    style="word-wrap: break-word; word-break:break-all; overflow:hidden; text-overflow: -o-ellipsis-lastline;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 5;line-clamp: 5;-webkit-box-orient: vertical;">
+                                                    {{webpage.description}}</div>
+                                            </div>
+                                            <div class="w-24px mr-4 mt-2" :class="{'visible': webpage.checkboxVisible, 'invisible': !webpage.checkboxVisible}">
+                                                <el-checkbox v-model="webpage.checked"/>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="bg-gray-200 h-1/5 rounded-b-2xl text-xs">
-                                        <div class="flex justify-between text-gray-600 ml-8 mr-6 pt-3">
-                                            <div>{{webpageInfo.source}}</div>
-                                            <div>{{moment(webpageInfo.createTime).format("yyyy-MM-DD")}}</div>
+                                        <div class="h-32px text-xs rounded-b-2xl flex justify-between items-center pl-4 pr-6" style="background-color: #f6f7f9; color: #6d7582">
+                                            <div class="flex justify-between">
+                                                <img :src="webpage.favicon" class="h-16px w-16px">
+                                                <p class="ml-8px">{{getHost(webpage.source)}}</p>
+                                            </div>
+                                            <div>{{getFormateTime(webpage.createTime)}}</div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <template #dropdown>
-                                <el-dropdown-menu>
-                                    <el-dropdown-item :icon="DeleteFilled" @click="deleteWebpageCard(webpageInfo.id)">删除</el-dropdown-item>
-                                    
-                                </el-dropdown-menu>
-                            </template>
-                        </el-dropdown>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div v-if="state.showAddWebPageModal"
+        <div v-if="visibleState.addWebPageModalVisible"
             class="min-w-screen h-screen animated fadeIn faster fixed left-0 top-0 flex  inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover">
             <div class="absolute bg-black opacity-80 inset-0 z-0"></div>
             <div class="w-full  max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg  bg-white ">
@@ -155,84 +154,212 @@
                 </div>
             </div>
         </div>
+        <el-dialog v-model="visibleState.dialogVisible" width="60%">
+            <div style="height:70vh;">
+                <webview nodeintegration allowpopups id="webview" class="w-full h-full"></webview>
+            </div>
+        </el-dialog>
+
+        <transition name="contexmenu">
+            <div v-if="contextmenuState.visible" class="absolute h-120px w-140px bg-light-50 rounded-md shadow-md text-sm text-gray-500 pt-4px overflow-hidden"
+                v-bind:style="{ top: contextmenuState.top + 'px', left: contextmenuState.left + 'px', zIndex: 1000 }">
+                <div class="hover:bg-gray-200 hover:rounded-md hover:cursor-pointer h-30px flex justify-start items-center ml-6px mr-4px mt-4px"
+                    @click="openUrl(webpage.url)"
+                >
+                    <div class="flex justify-start items-center">
+                        <View style="width: 1.2em; height: 1.2em; margin-left: 12px; margin-right: 8px" />
+                        <p class="ml-4px">访问网页</p>
+                    </div>
+                </div>
+                <div class="hover:bg-gray-200 hover:rounded-md hover:cursor-pointer h-30px flex justify-start items-center ml-6px mr-4px mt-4px"
+                    @click="copyUrl(webpage.url)"
+                >
+                    <div class="flex justify-start items-center">
+                        <Link style="width: 1.2em; height: 1.2em; margin-left: 12px; margin-right: 8px" />
+                        <p class="ml-4px" >复制链接</p>
+                    </div>
+                </div>
+                <div class="hover:bg-gray-200 hover:rounded-md hover:cursor-pointer h-30px flex justify-start items-center ml-6px mr-4px mt-4px"
+                    @click="deleteWebpageCard(webpage.id)"
+                >
+                    <div class="flex justify-start items-center">
+                        <DeleteFilled style="width: 1.2em; height: 1.2em; margin-left: 12px; margin-right: 8px" />
+                        <p class="ml-4px">删除收藏</p>
+                    </div>
+                </div>
+            </div>
+        </transition>
+
     </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive } from 'vue'
+import { onBeforeUpdate, onMounted, reactive, ref, isProxy, toRaw, nextTick, unref, computed } from 'vue'
 import { webpageApi } from '../api/webpage'
-import moment from 'moment'
-import { shell } from 'electron'
+import { clipboard } from 'electron'
+import { CheckboxValueType, ElButton, ElCheckbox, ElDialog, ElDropdown, ElDropdownItem, ElDropdownMenu, ElMessage, ElMessageBox, ElPopover } from 'element-plus'
 import {
-    DeleteFilled
+    Link,
+    View,
+    More,
+    Star,
+    Delete,
+    CirclePlusFilled,
+    Search,
+    DeleteFilled,
+    CircleClose
 } from '@element-plus/icons-vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import moment from 'moment'
+import "moment/dist/locale/zh-cn";
+import { vOnClickOutside } from '@vueuse/components'
 
+interface WebPage {
+    id: number
+    groupId: number
+    url: string
+    title: string
+    source: string
+    favicon: string
+    checked: boolean,
+    checkboxVisible: boolean,
+    description: string
+    updateTime: number
+    createTime: number
+}
+interface WebPageInfo {
+    page: number
+    pages: number
+    total: number
+    records: Array<WebPage>
+}
+interface WebPageDetail {
+    allTotal: number
+    starTotal: number
+    todayTotal: number
+}
 
-const state = reactive({
-    url: '',
-    singleWebpageInfo: '',
+const webpageDetail = ref<WebPageDetail>({
+    allTotal: 0,
+    starTotal: 0,
+    todayTotal: 0
+})
+const webpageInfo = ref<WebPageInfo>({
     page: 0,
     pages: 0,
     total: 0,
-    allTotal: 0,
-    starTotal: 0,
-    todayTotal: 0,
-    webpageInfos: [],
-    showAddWebPageModal: false,
+    records: []
+})
+const webpageList = ref<WebPage[]>([])
+
+const state = reactive({
+    firstPage: 1,
     sourceUrl: '',
     active: "all",
     activeSide: "favorite",
-    searchText: ''
+    searchText: '',
+    checkbox: false,
+    checkAll: computed({
+        get: () => {
+            return webpageInfo.value.records.length === webpageInfo.value.records.filter(e => e.checked).length
+        },
+        set: (val) => {
+            webpageInfo.value.records.forEach(item => item.checked = val)
+            webpageInfo.value.records.forEach(item => item.checkboxVisible = val)
+        }
+    }),
+    checkNum: computed(() => {
+        return webpageInfo.value.records.filter(e => e.checked).length
+    }),
+    checkAllVisible: computed(() => {
+        return webpageInfo.value.records.filter(e => e.checked).length > 0
+    }),
+})
+
+const navState = reactive([
+    {
+        type: "all",
+        name: "所有",
+        nums: 0,
+    },
+    {
+        type: "star",
+        name: "星标",
+        nums: 0,
+    },
+    {
+        type: "today",
+        name: "今日",
+        nums: 0,
+    },
+])
+const activeNav = reactive({
+    type: "all",
+    name: "所有",
+    nums: 0
+})
+
+const contextmenuState = reactive({
+    top: 0,
+    left: 0,
+    visible: false,
+})
+
+const webpage = ref<WebPage>({
+    id: 0,
+    groupId: 0,
+    url: '',
+    title: '',
+    source: '',
+    favicon: '',
+    checked: false,
+    checkboxVisible: false,
+    description: '',
+    updateTime: 0,
+    createTime: 0
+})
+
+const visibleState = reactive({
+    dialogVisible: false,
+    addWebPageModalVisible: false,
 })
 
 onMounted(() => {
     resetState()
     getDetail()
-    getAllPages()
+    getCardList(activeNav.type, ++webpageInfo.value.page)
 })
 
-function handleScroll(e) {
+function handleScroll(e:any) {
     const { scrollTop, clientHeight, scrollHeight } = e.target
     if (scrollTop + clientHeight === scrollHeight) {
-        if (state.total != state.webpageInfos.length) {
-            getAllPages()
+        if (webpageInfo.value.total != webpageList.value.length) {
+            // getAllPages(++webpageInfo.value.page)
         }
     }
 }
 
 function resetState() {
-    state.page = 0
-    state.pages = 0
-    state.webpageInfos = []
+    webpageList.value = []
+    webpageInfo.value.page = 0
+    webpageInfo.value.pages = 0
 }
 
 function resetSearchText() {
     state.searchText = ''
 }
 
-function handleClickAll() {
-    state.active = 'all'
+function handleNav(type:string) {
+    for (let i = 0; i < navState.length; i++) {
+        if (type === navState[i].type) {
+            activeNav.name = navState[i].name
+            activeNav.type = navState[i].type
+            break
+        }
+    }
     resetState()
     resetSearchText()
     getDetail()
-    getAllPages()
-}
-
-function handleClickStar() {
-    state.active = 'star'
-    resetState()
-    resetSearchText()
-    getDetail()
-    getStarPages()
-}
-
-function handleClickToday() {
-    state.active = 'today'
-    resetState()
-    resetSearchText()
-    getDetail()
-    getTodayPages()
+    getCardList(type, ++webpageInfo.value.page)
 }
 
 function handleClickSearch() {
@@ -240,111 +367,251 @@ function handleClickSearch() {
     search()
 }
 
-function getDetail() {
-    webpageApi.detail().then((resp) => {
-        state.allTotal = parseInt(resp.data.allTotal)
-        state.starTotal = parseInt(resp.data.starTotal)
-        state.todayTotal = parseInt(resp.data.todayTotal)
-    })
+async function getDetail() {
+    const { data } = await webpageApi.detail()
+    webpageDetail.value = data.data as WebPageDetail
+    for (let i = 0; i < navState.length; i++) {
+        if (navState[i].type === 'all') {
+            navState[i].nums = data.data.allTotal
+        }
+        if (navState[i].type === 'star') {
+            navState[i].nums = data.data.starTotal
+        }
+        if (navState[i].type === 'today') {
+            navState[i].nums = data.data.todayTotal
+        }
+    }
 }
 
-function getAllPages() {
-    const result = webpageApi.getAll(++state.page)
-    result.then((resp) => {
-        state.webpageInfos.push(...resp.data.records)
-        state.pages = parseInt(resp.data.pages)
-        state.allTotal = parseInt(resp.data.total)
-    })
+async function getCardList(type:string, page:number) {
+    let data 
+    if (type === 'all') {
+        data = await webpageApi.getAll(page)
+    } else if (type === 'star') {
+        data = await webpageApi.getStar(page)
+    } else if (type === 'today') {
+        data = await webpageApi.getToday(page)
+    } else {
+        return
+    }
+    const result = data.data.data
+    if (page === state.firstPage) {
+        webpageInfo.value.records = []
+    }
+    webpageInfo.value.records.push(...result.records)
+    webpageInfo.value.pages = parseInt(result.pages)
+    webpageInfo.value.records.forEach(item => item.checked = false)
+    webpageInfo.value.records.forEach(item => item.checkboxVisible = false)
 }
 
-function getStarPages() {
-    const result = webpageApi.getStar(++state.page)
-    result.then((resp) => {
-        state.webpageInfos.push(...resp.data.records)
-        state.pages = parseInt(resp.data.pages)
-        state.starTotal = parseInt(resp.data.total)
-    })
-}
-
-function getTodayPages() {
-    const result = webpageApi.getToday(++state.page)
-    result.then((resp) => {
-        state.webpageInfos.push(...resp.data.records)
-        state.pages = parseInt(resp.data.pages)
-        state.todayTodal = parseInt(resp.data.total)
-    })
-}
-
-function search() {
-    const result = webpageApi.search("", state.searchText, ++state.page)
-    result.then((resp) => {
-        state.webpageInfos.push(...resp.data.records)
-        state.pages = parseInt(resp.data.pages)
-    })
+async function search() {
+    const { data } = await webpageApi.search(state.searchText, ++webpageInfo.value.page)
+    const result = data.data
+    webpageInfo.value.records = []
+    webpageInfo.value.records.push(...result.records)
+    webpageInfo.value.records.forEach(item => item.checked = false)
+    webpageInfo.value.records.forEach(item => item.checkboxVisible = false)
+    webpageInfo.value.pages = parseInt(result.pages)
 }
 
 function showAddWebPageUrlModal() {
     state.sourceUrl = ''
-    state.showAddWebPageModal = true
+    visibleState.addWebPageModalVisible = true
 }
 
 function closeAddWebPageUrlModal() {
-    state.showAddWebPageModal = false
+    visibleState.addWebPageModalVisible = false
 }
 
-function openUrl(event: Event, url: string) {
-    event.preventDefault()
-    shell.openExternal(url)
+function openUrl(url: string) {
+    visibleState.dialogVisible = true
+    const wv = document.getElementById("webview")
+    if (wv !== null) {
+        wv.setAttribute('src', url)
+    }
 }
 
-function addWebPageUrl() {
-    webpageApi.add({
+async function addWebPageUrl() {
+    const { data } = await webpageApi.add({
         "url": state.sourceUrl
-    }).then((resp) => {
-        state.showAddWebPageModal = false
-        getAllPages()
+    }).finally(() => {
+        visibleState.addWebPageModalVisible = false
+    }) 
+    success("添加成功")
+    getDetail()
+    getCardList('all', state.firstPage)
+}
+
+function handleCardRightClick(event:MouseEvent, refId:number) {
+    const data = getWebPage(refId)
+    if (data !== null) {
+        webpage.value = data as WebPage
+    }
+    if (contextmenuState.visible) {
+        contextmenuState.visible = false
+        nextTick(()=> {
+            contextmenuState.visible = true
+            if (event.target) {
+                contextmenuState.top = event.y
+                contextmenuState.left = event.x
+            }
+        })
+    } else {
+        contextmenuState.visible = true
+        if (event.target) {
+            contextmenuState.top = event.y
+            contextmenuState.left = event.x
+        }
+    }
+}
+
+function handleCardLeftClick(event:Event, refId:number) {
+    if (state.checkAllVisible) {
+        webpageInfo.value.records.forEach( item => {
+            if (refId === item.id) {
+                item.checked = !item.checked
+                event.preventDefault()
+            }
+        })
+    }
+}
+
+function handleCardMouseEnter(event:Event, refId:number) {
+    webpageInfo.value.records.forEach( item => {
+        if (refId === item.id) {
+            if (!item.checkboxVisible) {
+                item.checkboxVisible = true
+            }
+        }
     })
+}
+
+function handleCardMouseLeave(event:Event, refId:number) {
+    if (!state.checkAllVisible) {
+        webpageInfo.value.records.forEach( item => {
+            if (refId === item.id) {
+                if (item.checkboxVisible) {
+                    item.checkboxVisible = false
+                }
+            }
+        })
+    }
+}
+
+function handleExitMoreOption() {
+    webpageInfo.value.records.forEach(item => item.checked = false)
+    webpageInfo.value.records.forEach(item => item.checkboxVisible = false)
+}
+
+function closeContentMenu() {
+    contextmenuState.visible = false
 }
 
 function deleteWebpageCard(id: any) {
     ElMessageBox.confirm(
         '确认删除卡片吗?',
-        'Warning',
+        '警告',
         {
             confirmButtonText: '确认',
             cancelButtonText: '取消',
             type: 'warning',
         }
-    )
-        .then(() => {
-            webpageApi.remove({
-                id: id,
-            }).then(resp => {
-                console.log(resp.code === "0000000")
-                if (resp.code === "0000000") {
-                    if (state.active === 'all') {
-                        handleClickAll()
-                    } else if (state.active === 'star') {
-                        handleClickStar()
-                    } else if (state.active === 'today') {
-                        handleClickToday()
-                    }
-                    ElMessage({
-                        type: 'success',
-                        message: '删除成功',
-                    })
-                } else {
-                    ElMessage({
-                        type: 'info',
-                        message: resp.desc,
-                    })
-                }
-            })
-        })
+    ).then(async () => {
+        await webpageApi.remove({id: id})
+        handleNav(activeNav.type)
+        success("删除成功")
+    })
 }
+
+function batchDeleteWebpageCard() {
+    ElMessageBox.confirm(
+        '确认删除选中卡片吗?',
+        '警告',
+        {
+            confirmButtonText: '确认',
+            cancelButtonText: '取消',
+            type: 'warning',
+        }
+    ).then(async () => {
+        const ids = webpageInfo.value.records
+            .filter(e => e.checked)
+            .map(e => e.id)
+        await webpageApi.batchRemove(ids)
+        handleNav(activeNav.type)
+        success("删除成功")
+    })
+}
+
+function copyUrl(url: string) {
+    clipboard.writeText(url, 'selection')
+}
+
+function getHost(url: string) {
+    return new URL(url).hostname
+}
+
+function getFormateTime(createTime: number) {
+    if (moment(createTime).year == moment(new Date()).year) {
+        return moment.utc(createTime).utcOffset(0).calendar()
+    } else {
+        return moment.utc(createTime).utcOffset(0).format("yyyy-MM-DD")
+    }
+}
+
+function getWebPage(webpageId:number) {
+    let webpage = null
+    webpageInfo.value.records.forEach(item => {
+        if (webpageId === item.id) {
+            webpage = item
+        }
+    })
+    return webpage
+}
+
+function success(message: string) {
+    ElMessage({
+        type: 'success',
+        message: message,
+    })
+}
+
+function warning(message: string) {
+    ElMessage({
+        type: 'warning',
+        message: message,
+    })
+}
+
+function error(message: string) {
+    ElMessage({
+        type: 'error',
+        message: message,
+    })
+}
+
+function info(message: string) {
+    ElMessage({
+        type: 'info',
+        message: message,
+    })
+}
+
 
 </script>
 
-<style scoped >
-
+<style >
+.contexmenu-enter-active {
+    animation: contexmenu-in 0.2s;
+}
+.contexmenu-leave-active {
+    animation: contexmenu-in 0.2s reverse;
+}
+@keyframes contexmenu-in {
+    from{
+        height: 0px;
+    }
+    to{
+        height: 120px;
+    }
+}
 </style>

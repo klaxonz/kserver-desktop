@@ -1,11 +1,13 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import WebPageResource from './components/WebPageResource.vue';
+import WebPageResource from './components/WebPageResource.vue'
+import BookReader from './components/BookReader.vue'
 </script>
 
 <template>
   <WebPageResource></WebPageResource>
+  <!-- <BookReader></BookReader> -->
 </template>
 
 <style>
