@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-row h-full" style="font-family: PingFang SC,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji">
-        <div class="w-80px bg-gray-200">
+        <div class="w-80px flex flex-col justify-between bg-gray-200">
             <div class="container mt-5">
                 <div class="h-48px w-60px mx-auto mb-2 flex justify-center items-center hover:bg-gray-300 cursor-pointer rounded-md"
                     :class="{'bg-gray-300': state.activeSide === 'favorite'}">
@@ -19,6 +19,29 @@
                     <div>归档</div>
                 </div>
             </div>
+            <div class="container mt-5">
+                
+                <div class="h-48px w-60px mx-auto mb-2 flex justify-center items-center hover:bg-gray-300 cursor-pointer rounded-md"
+                    :class="{'bg-gray-300': state.activeSide === 'favorite'}">
+                    <div @click="visibleState.accountModalVisible = !visibleState.accountModalVisible">账户</div>
+
+                    <div v-if="visibleState.accountModalVisible" class="absolute left-84px bottom-30px w-144px h-80px rounded-md text-gray-500 text-sm bg-gray-200 flex flex-col items-center justify-center">
+                        <div class="cursor-pointer hover:bg-blue-500 hover:text-light-50 w-8/10 h-28px rounded-md flex items-center">
+                            <p class="pl-8px">用户信息</p>
+                        </div>
+                        <hr size="1px" color="#808080" class="h-2px w-8/10 mt-2px mb-2px"/>
+                        <div @click="handleLogout" class="cursor-pointer hover:bg-blue-500 hover:text-light-50 w-8/10 h-28px rounded-md flex items-center">
+                            <p class="pl-8px">退出登录</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="h-48px w-60px mx-auto mb-2 flex justify-center items-center hover:bg-gray-300 cursor-pointer rounded-md"
+                    :class="{'bg-gray-300': state.activeSide === 'tag'}">
+                    <div>设置</div>
+                </div>
+               
+            </div>
 
         </div>
         <div class="w-250px bg-gray-100">
@@ -29,8 +52,8 @@
                 <div class="mt-5">
                     <div>
                         <div v-for="nav in navState"
-                            class="h-40px bg-gray-200  rounded-lg mb-2 cursor-pointer"
-                            :class="{'bg-blue-500': activeNav.type===nav.type, 'text-light-100': activeNav.type===nav.type}"
+                            class="h-40px rounded-lg mb-2 cursor-pointer"
+                            :class="{'bg-blue-500': activeNav.type===nav.type, 'bg-gray-200': activeNav.type!==nav.type, 'text-light-100': activeNav.type===nav.type}"
                             @click="handleNav(nav.type)">
                             <div class="h-full flex justify-between ml-5 mr-5">
                                 <div class="h-full flex justify-center items-center">
@@ -94,7 +117,7 @@
                     <div class="grid "
                         style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); grid-gap: 20px 20px;">
                         <div class="h-200px  rounded-2xl cursor-pointer hover:shadow-md  "
-                            :class="{'border-blue-400': webpage.checked, 'border-r-3px': webpage.checked, 'bg-blue-400': webpage.checked,
+                            :class="{'border-r-3px': webpage.checked, 'bg-blue-400': webpage.checked,
                                  'bg-opacity-25': webpage.checked, 'bg-light-100': !webpage.checked}"
                              @click.right="handleCardRightClick($event, webpage.id)"  @click.left="handleCardLeftClick($event, webpage.id)"
                              @mouseenter="handleCardMouseEnter($event, webpage.id)"
@@ -156,7 +179,7 @@
         </div>
         <el-dialog v-model="visibleState.dialogVisible" width="60%">
             <div style="height:70vh;">
-                <webview nodeintegration allowpopups id="webview" class="w-full h-full"></webview>
+                <!-- <webview nodeintegration allowpopups id="webview" class="w-full h-full"></webview> -->
             </div>
         </el-dialog>
 
@@ -194,10 +217,13 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUpdate, onMounted, reactive, ref, isProxy, toRaw, nextTick, unref, computed } from 'vue'
+import { onMounted, reactive, ref, nextTick, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { webpageApi } from '../api/webpage'
+import { accountApi } from '../api/account'
+import { message } from '../utils/message'
 import { clipboard } from 'electron'
-import { CheckboxValueType, ElButton, ElCheckbox, ElDialog, ElDropdown, ElDropdownItem, ElDropdownMenu, ElMessage, ElMessageBox, ElPopover } from 'element-plus'
+import { ElButton, ElCheckbox, ElDialog, ElDropdown, ElDropdownItem, ElDropdownMenu, ElMessage, ElMessageBox, ElPopover } from 'element-plus'
 import {
     Link,
     View,
@@ -212,6 +238,8 @@ import {
 import moment from 'moment'
 import "moment/dist/locale/zh-cn";
 import { vOnClickOutside } from '@vueuse/components'
+
+const router = useRouter()
 
 interface WebPage {
     id: number
@@ -304,6 +332,17 @@ const contextmenuState = reactive({
     visible: false,
 })
 
+const accountInfo = reactive({
+    username: "",
+    password: "",
+    email: ""
+})
+
+const accountLoginState = reactive({
+    loginState: true,
+    
+})
+
 const webpage = ref<WebPage>({
     id: 0,
     groupId: 0,
@@ -321,7 +360,11 @@ const webpage = ref<WebPage>({
 const visibleState = reactive({
     dialogVisible: false,
     addWebPageModalVisible: false,
+    loginDialogVisible: false,
+    accountModalVisible: false,
 })
+
+const popClass = ref('bg-gray-500')
 
 onMounted(() => {
     resetState()
@@ -437,7 +480,7 @@ async function addWebPageUrl() {
     }).finally(() => {
         visibleState.addWebPageModalVisible = false
     }) 
-    success("添加成功")
+    message.success("添加成功")
     getDetail()
     getCardList('all', state.firstPage)
 }
@@ -519,7 +562,7 @@ function deleteWebpageCard(id: any) {
     ).then(async () => {
         await webpageApi.remove({id: id})
         handleNav(activeNav.type)
-        success("删除成功")
+        message.success("删除成功")
     })
 }
 
@@ -538,7 +581,7 @@ function batchDeleteWebpageCard() {
             .map(e => e.id)
         await webpageApi.batchRemove(ids)
         handleNav(activeNav.type)
-        success("删除成功")
+        message.success("删除成功")
     })
 }
 
@@ -568,38 +611,20 @@ function getWebPage(webpageId:number) {
     return webpage
 }
 
-function success(message: string) {
-    ElMessage({
-        type: 'success',
-        message: message,
+function handleLogout() {
+    accountApi.logout().then(resp => {
+        router.push({name: 'Login'})
     })
 }
-
-function warning(message: string) {
-    ElMessage({
-        type: 'warning',
-        message: message,
-    })
-}
-
-function error(message: string) {
-    ElMessage({
-        type: 'error',
-        message: message,
-    })
-}
-
-function info(message: string) {
-    ElMessage({
-        type: 'info',
-        message: message,
-    })
-}
-
-
+ 
 </script>
 
-<style >
+<style>
+
+.bg-my {
+    background: aqua;
+}
+
 .contexmenu-enter-active {
     animation: contexmenu-in 0.2s;
 }

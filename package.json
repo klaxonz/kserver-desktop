@@ -46,12 +46,15 @@
     "vue"
   ],
   "dependencies": {
+    "@element-plus/icons-vue": "^2.0.10",
     "@vueuse/components": "^9.10.0",
     "@vueuse/core": "^9.10.0",
     "click-outside-vue3": "^4.0.1",
     "element-plus": "^2.2.17",
+    "js-base64": "^3.7.4",
     "moment": "^2.29.4",
     "vue-click-outside-element": "^3.1.2",
-    "vue-infinite-scroll": "^2.0.2"
+    "vue-infinite-scroll": "^2.0.2",
+    "vue-router": "4"
   }
 }
