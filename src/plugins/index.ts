@@ -1,4 +1,5 @@
 import axios from 'axios'
+import router from './router'
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { ElMessage } from 'element-plus'
 import config from '../config/index'
@@ -60,7 +61,7 @@ export class Request {
               break
             case 401:
               message = "未授权，请重新登录(401)"
-              // 这里可以做清空storage并跳转到登录页的操作
+              router.push({name: "Login"})
               break
             case 403:
               message = "拒绝访问(403)"

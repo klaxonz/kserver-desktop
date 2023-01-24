@@ -5,8 +5,6 @@
 </script>
 
 <template>
-  <!-- <WebPageResource></WebPageResource> -->
-  <!-- <BookReader></BookReader> -->
   <router-view></router-view>
 </template>
 
