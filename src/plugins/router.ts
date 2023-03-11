@@ -2,8 +2,8 @@ import { createRouter, createWebHashHistory, RouterOptions, Router, RouteRecordR
 //由于router的API默认使用了类型进行初始化，内部包含类型定义，所以本文内部代码中的所有数据类型是可以省略的
 //RouterRecordRaw是路由组件对象
 const routes: RouteRecordRaw[] = [
- { path: '/', name: 'Login', component: () => import('../components/LoginPage.vue') },
- { path: '/webpage', name: 'WebPage', component: () => import('../components/WebPageResource.vue') },
+ { path: '/', name: 'Login', component: () => import('../page/LoginPage.vue') },
+ { path: '/webpage', name: 'WebPage', component: () => import('../page/WebPageResource.vue') },
 ]
 
 // RouterOptions是路由选项类型

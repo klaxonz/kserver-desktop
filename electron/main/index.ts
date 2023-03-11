@@ -37,9 +37,6 @@ async function createWindow() {
     icon: join(ROOT_PATH.public, 'favicon.ico'),
     webPreferences: {
       preload,
-      // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
-      // Consider using contextBridge.exposeInMainWorld
-      // Read more on https://www.electronjs.org/docs/latest/tutorial/context-isolation
       webSecurity: false,
       nodeIntegration: true,
       contextIsolation: false,
@@ -68,7 +65,7 @@ async function createWindow() {
 }
 
 app.whenReady().then(createWindow).then(async () => {
-  await session.defaultSession.loadExtension('C:\\Users\\MSN\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\6.4.5_0')
+  await session.defaultSession.loadExtension('C:\\Users\\MSN\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\6.5.0_0')
 })
 
 app.on('window-all-closed', () => {

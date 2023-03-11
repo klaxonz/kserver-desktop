@@ -1,5 +1,4 @@
 import { ElMessage } from "element-plus"
-import { de } from "element-plus/es/locale"
 
 function success(message: string) {
     ElMessage({

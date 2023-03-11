@@ -34,7 +34,7 @@ export class Request {
         },
         (err: any) => {
           // 请求错误，这里可以用全局提示框进行提示
-          return Promise.reject(err)
+          // return Promise.reject(err)
         },
       )
       
@@ -42,11 +42,6 @@ export class Request {
         (res: AxiosResponse) => {
           // 直接返回res，当然你也可以只返回res.data
           if (res.data.code !== '0000000') {
-            ElMessage({
-                showClose: true,
-                message: `${res.data.desc}`,
-                type: "error",
-            })
             return Promise.reject(res)
           }
           // 系统如果有自定义code也可以在这里处理

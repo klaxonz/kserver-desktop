@@ -14,7 +14,15 @@ rmSync('dist', { recursive: true, force: true }) // v14.14.0
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    vue(),
+    vue({
+      template: {
+        compilerOptions: {
+          isCustomElement: (tag) => {
+            return tag === 'webview' // (return true)
+          }
+        }
+      }
+    }),
     WindiCSS(),
     electron({
       main: {
