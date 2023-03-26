@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { getWebpageCardList } from '../../interf/webpage';
+import { getDetail, getWebpageCardList } from '../../interf/webpage';
 import { useWebpageStore } from '../../stores';
 
 const store = useWebpageStore()
@@ -36,6 +36,8 @@ function handleCategoryClick(category: WebPageCategory) {
             store.changeCategory(category)
         }
     })
+    store.text = ''
+    getDetail()
 
     store.page = 1
     const page = store.page

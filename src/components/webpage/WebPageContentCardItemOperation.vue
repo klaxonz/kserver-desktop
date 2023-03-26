@@ -37,6 +37,7 @@ import { useWebpageStore } from '../../stores'
 import { ElMessageBox } from 'element-plus';
 import { webpageApi } from '../../api/webpage';
 import { View, Link, DeleteFilled } from '@element-plus/icons-vue'
+import { getDetail, getWebpageCardList } from '../../interf/webpage';
 
 const store = useWebpageStore()
 
@@ -77,7 +78,14 @@ function deleteCard(id: any) {
         }
     ).then(async () => {
         await webpageApi.remove({ id: id })
+        getDetail()
+
+        store.page = 1
+        const page = store.page
+        getWebpageCardList(page)
+
         closeContentMenu()
+        
         message.success("删除成功")
     })
 }

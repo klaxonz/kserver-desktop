@@ -88,7 +88,9 @@ function handleRightClickCard(event: MouseEvent, refId: number) {
             store.left = event.x
         }
     }
-    store.webpage = webpage
+    if (webpage) {
+        store.webpage = webpage
+    }
 }
 
 function handleMouseEnterCard(event: Event, refId: number) {
