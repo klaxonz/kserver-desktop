@@ -1,4 +1,3 @@
-import { da } from 'element-plus/es/locale'
 import request from '../plugins/index'
 
 export const webpageApi = {
@@ -26,10 +25,11 @@ export const webpageApi = {
     detail: () => {
         return request.get('webpage/detail')
     },
-    list: (data: any) => {
-        return request.post( `webpage/list`, data)
-    },
-    search: (q: string, page: number, type?: string) => {
-        return request.get(`webpage/search?type=${type}&q=${q}&page=${page}`)
+    list: (data: any, q?: string) => {
+        let api = 'webpage/list'
+        if (q) {
+            api += `?q=${q}`
+        }
+        return request.post( api, data)
     },
 }

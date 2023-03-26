@@ -5,16 +5,15 @@
                 <div class="font-semibold text-lg ml-3">我的收藏</div>
             </div>
             <div class="mt-5">
-                <div v-for="category in categoryState"
-                    class="h-40px rounded-lg mb-2 cursor-pointer"
-                    :class="{'bg-blue-500': category.selected, 'bg-gray-200': !category.selected, 'text-light-100': category.selected}"
-                    @click="$emit('category-selected', category)">
+                <div v-for="category in store.categoryState" class="h-40px rounded-lg mb-2 cursor-pointer"
+                    :class="{ 'bg-blue-500': category.selected, 'bg-gray-200': !category.selected, 'text-light-100': category.selected }"
+                    @click="handleCategoryClick(category)">
                     <div class="h-full flex justify-between ml-5 mr-5">
                         <div class="h-full flex justify-center items-center">
-                            {{category.name}}
+                            {{ category.name }}
                         </div>
                         <div class="h-full flex justify-center items-center">
-                            <div>{{category.num}}</div>
+                            <div>{{ category.num }}</div>
                         </div>
                     </div>
                 </div>
@@ -24,22 +23,28 @@
 </template>
 
 <script setup lang="ts">
+import { getWebpageCardList } from '../../interf/webpage';
+import { useWebpageStore } from '../../stores';
+
+const store = useWebpageStore()
 
 
-defineProps({
-    categoryState: {
-        type: Array<WebPageCategory>,
-        required: true
-    }
-})
+function handleCategoryClick(category: WebPageCategory) {
+    store.categoryState.forEach(item => {
+        item.selected = item.type === category.type
+        if (item.type === category.type) {
+            store.changeCategory(category)
+        }
+    })
 
-defineEmits(['category-selected'])
+    store.page = 1
+    const page = store.page
+    getWebpageCardList(page)
+}
 
 
 
 
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -83,7 +83,7 @@ export class Request {
               message = "网络超时(504)"
               break
             case 505:
-              message = "HTTP版本不受支持(505)"
+              message = "HTTPS版本不受支持(505)"
               break
             default:
               message = `连接出错(${err.response.status})!`

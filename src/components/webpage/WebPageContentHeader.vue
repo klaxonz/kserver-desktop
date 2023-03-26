@@ -1,19 +1,15 @@
 <template>
     <div class="flex justify-between">
         <div class="w-500px">
-            <el-input
-                v-model="_searchText"
-                class="h-36px w-500px rounded-md pl-2 outline-gray-200"
-                @keyup.enter.native="$emit('enter')" @input="$emit('update-value', _searchText)"
-                placeholder="搜索"
-                >
+            <el-input v-model="store.text" class="h-36px w-500px rounded-md pl-2 outline-gray-200"
+                @keyup.enter.native="searchWebpage" placeholder="搜索">
                 <template #prepend>
                     <el-button :icon="Search" />
                 </template>
             </el-input>
         </div>
         <div>
-            <el-button class="h-full" type="primary" :icon="CirclePlusFilled" @click="$emit('add-page')"/>
+            <el-button class="h-full" type="primary" :icon="CirclePlusFilled" @click="showAddWebPageUrlModal" />
         </div>
     </div>
 </template>
@@ -23,23 +19,24 @@ import {
     Search,
     CirclePlusFilled,
 } from '@element-plus/icons-vue'
-import { ref } from 'vue';
+import { useWebpageStore } from '../../stores'
+import { getWebpageCardList } from '../../interf/webpage'
 
-const props = defineProps({
-    searchText: {
-        type: String,
-        required: true
-    }
-})
 
-defineEmits(['enter', 'add-page', 'update-value'])
+const store = useWebpageStore()
 
-const _searchText = ref(props.searchText)
+function searchWebpage() {
+    store.page = 1
+    const page = store.page
+    getWebpageCardList(page)
+}
 
+function showAddWebPageUrlModal() {
+    store.sourceUrl = ''
+    store.addWebPageModalVisible = true
+}
 
 
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

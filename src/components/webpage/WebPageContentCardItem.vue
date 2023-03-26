@@ -1,11 +1,10 @@
 <template>
-    <div class="h-200px  rounded-2xl cursor-pointer hover:shadow-md  " :class="{
+    <div class="h-200px  rounded-2xl cursor-pointer hover:shadow-md" :class="{
         'border-r-3px': webpage.checked, 'bg-blue-400': webpage.checked,
         'bg-opacity-25': webpage.checked, 'bg-light-100': !webpage.checked
-    }"
-        @click.right="$emit('right-click', $event, webpage.id)" @click.left="$emit('left-click', $event, webpage.id)"
-        @mouseenter="$emit('mouse-enter', $event, webpage.id)" @mouseleave="$emit('mouse-leave', $event, webpage.id)"
-       >
+    }" @click.right="handleRightClickCard($event, webpage.id)" @click.left="handleLeftClickCard($event, webpage.id)"
+        @mouseenter="handleMouseEnterCard($event, webpage.id)" @mouseleave="handleMouseLeaveCard($event, webpage.id)"
+        v-click-outside-element="handleBlurCard">
         <div class="h-full w-full">
             <div class="h-full flex-col">
                 <div class="h-168px flex justify-between">
@@ -20,7 +19,7 @@
                     </div>
                     <div class="w-24px mr-4 mt-2"
                         :class="{ 'visible': webpage.checkboxVisible, 'invisible': !webpage.checkboxVisible }">
-                        <el-checkbox v-model="_checked" @change="$emit('update-check', _checked)" />
+                        <el-checkbox v-model="webpage.checked" @change="handleCheckboxChange(webpage.id)"/>
                     </div>
                 </div>
                 <div class="h-32px text-xs rounded-b-2xl flex justify-between items-center pl-4 pr-6"
@@ -39,7 +38,10 @@
 <script setup lang="ts">
 import moment from 'moment'
 import "moment/dist/locale/zh-cn";
-import { vOnClickOutside } from '@vueuse/components'
+import { nextTick } from 'vue';
+import { useWebpageStore } from '../../stores';
+import vueClickOutsideElement from 'vue-click-outside-element'
+
 
 const props = defineProps({
     webpage: {
@@ -50,12 +52,93 @@ const props = defineProps({
 const _checked = props.webpage.checked
 
 defineEmits([
-    'left-click',
-    'right-click',
-    'mouse-enter',
-    'mouse-leave',
     'update-check'
 ])
+
+
+const store = useWebpageStore()
+
+function handleLeftClickCard(event: Event, refId: number) {
+    if (store.checkAllVisible) {
+        store.webpageList.forEach(item => {
+            if (refId === item.id) {
+                item.checked = !item.checked
+                event.preventDefault()
+            }
+        })
+    }
+}
+
+function handleRightClickCard(event: MouseEvent, refId: number) {
+    const webpage = getWebpage(refId)
+
+    if (store.visible) {
+        store.visible = false
+        nextTick(() => {
+            store.visible = true
+            if (event.target) {
+                store.top = event.y
+                store.left = event.x
+            }
+        })
+    } else {
+        store.visible = true
+        if (event.target) {
+            store.top = event.y
+            store.left = event.x
+        }
+    }
+    store.webpage = webpage
+}
+
+function handleMouseEnterCard(event: Event, refId: number) {
+    store.webpageList.forEach(item => {
+        if (refId === item.id) {
+            if (!item.checkboxVisible) {
+                item.checkboxVisible = true
+            }
+            if (item.checked) {
+                item.checkboxVisible = true
+            }
+        }
+    })
+}
+
+function handleMouseLeaveCard(event: Event, refId: number) {
+    if (!store.checkAllVisible) {
+        store.webpageList.forEach(item => {
+            if (refId === item.id) {
+                if (item.checkboxVisible && !item.checked) {
+                    item.checkboxVisible = false
+                }
+            }
+        })
+    }
+}
+
+function handleCheckboxChange(refId: number) {
+    store.webpageList.forEach(item => {
+        if (refId === item.id && item.checked) {
+            console.log(item)
+            item.checkboxVisible = true
+        }
+    })
+}
+
+function handleBlurCard() {
+    store.visible = false
+}
+
+
+function getWebpage(refId: number) {
+    let webpage = null
+    store.webpageList.forEach(item => {
+        if (item.id === refId) {
+            webpage = item
+        }
+    })
+    return webpage
+}
 
 function getHost(url: string) {
     return new URL(url).hostname
@@ -69,7 +152,9 @@ function getFormateTime(createTime: number) {
     }
 }
 
+
+
+
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
