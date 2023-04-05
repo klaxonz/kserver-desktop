@@ -1,5 +1,5 @@
 import { useWebpageStore } from '@/stores'
-import { webpageApi } from '@/api/webPage'
+import { webpageApi } from '@/api/web-page'
 const store = useWebpageStore()
 
 export async function getWebpageCardList(page: number, pageSize?: number) {

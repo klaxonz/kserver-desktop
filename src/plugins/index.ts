@@ -1,5 +1,4 @@
 import axios from 'axios'
-import router from './router'
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { ElMessage } from 'element-plus'
 import config from '../config/index'

@@ -43,7 +43,7 @@ import { message } from '@/utils/message'
 
 import { useWebpageStore } from '@/stores'
 import { ElMessageBox } from 'element-plus'
-import { webpageApi } from '@/api/webPage'
+import { webpageApi } from '@/api/web-page'
 import { View, Link, DeleteFilled } from '@element-plus/icons-vue'
 import { getDetail, getWebpageCardList } from '@/interf/webpage'
 

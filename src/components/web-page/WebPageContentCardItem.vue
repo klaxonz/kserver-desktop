@@ -75,7 +75,6 @@ import moment from 'moment'
 import 'moment/dist/locale/zh-cn'
 import { nextTick, PropType, ref } from 'vue'
 import { useWebpageStore } from '@/stores'
-import vueClickOutsideElement from 'vue-click-outside-element'
 import { WebPage } from '@/type/webPage'
 
 const props = defineProps({

@@ -34,7 +34,7 @@
 <script setup lang="ts">
 import { Star, Delete } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
-import { webpageApi } from '@/api/webPage'
+import { webpageApi } from '@/api/web-page'
 import { message } from '@/utils/message'
 import { useWebpageStore } from '@/stores'
 import { getWebpageCardList, getDetail } from '@/interf/webpage'

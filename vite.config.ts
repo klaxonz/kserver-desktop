@@ -67,7 +67,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src')
+      '@': path.resolve(__dirname, './src')
     },
     // 结合 tsconfig.json 省略文件后缀名
     extensions: ['.mjs', '.ts', '.js', '.vue', '.jsx', '.tsx', '.json']

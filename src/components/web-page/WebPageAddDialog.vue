@@ -38,7 +38,7 @@
 
 <script setup lang="ts">
 import { useWebpageStore } from '@/stores'
-import { webpageApi } from '@/api/webPage'
+import { webpageApi } from '@/api/web-page'
 import { getDetail, getWebpageCardList } from '@/interf/webpage'
 
 const store = useWebpageStore()

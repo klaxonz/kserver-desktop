@@ -24,7 +24,7 @@
         </div>
 
         <div class="h-160px w-11/20 flex flex-col text-sm">
-          <div class="flex mb-8px">
+          <div class="flex mb-8px max-h-24 line-clamp-2">
             <p class="text-base subpixel-antialiased font-semibold">{{ task.webPage.title }}</p>
           </div>
           <div class="flex">
