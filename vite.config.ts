@@ -8,6 +8,7 @@ import WindiCSS from 'vite-plugin-windicss'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import eslintPlugin from 'vite-plugin-eslint'
 
 rmSync('dist', { recursive: true, force: true }) // v14.14.0
 
@@ -31,38 +32,50 @@ export default defineConfig({
           build: {
             // For Debug
             sourcemap: true,
-            outDir: 'dist/electron/main',
+            outDir: 'dist/electron/main'
           },
           // Will start Electron via VSCode Debug
-          plugins: [process.env.VSCODE_DEBUG ? onstart() : null],
-        },
+          plugins: [process.env.VSCODE_DEBUG ? onstart() : null]
+        }
       },
       preload: {
         input: {
           // You can configure multiple preload here
-          index: path.join(__dirname, 'electron/preload/index.ts'),
+          index: path.join(__dirname, 'electron/preload/index.ts')
         },
         vite: {
           build: {
             // For Debug
             sourcemap: 'inline',
-            outDir: 'dist/electron/preload',
-          },
-        },
+            outDir: 'dist/electron/preload'
+          }
+        }
       },
       // Enables use of Node.js API in the Renderer-process
       // https://github.com/electron-vite/vite-plugin-electron/tree/main/packages/electron-renderer#electron-renderervite-serve
-      renderer: {},
+      renderer: {}
     }),
     AutoImport({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [ElementPlusResolver()]
     }),
     Components({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [ElementPlusResolver()]
+    }),
+    eslintPlugin({
+      include: ['src/**/*.ts', 'src/**/*.vue', 'src/*.ts', 'src/*.vue']
     })
   ],
-  server: process.env.VSCODE_DEBUG ? {
-    host: pkg.debug.env.VITE_DEV_SERVER_HOSTNAME,
-    port: pkg.debug.env.VITE_DEV_SERVER_PORT,
-  } : undefined,
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src')
+    },
+    // 结合 tsconfig.json 省略文件后缀名
+    extensions: ['.mjs', '.ts', '.js', '.vue', '.jsx', '.tsx', '.json']
+  },
+  server: process.env.VSCODE_DEBUG
+    ? {
+      host: pkg.debug.env.VITE_DEV_SERVER_HOSTNAME,
+      port: pkg.debug.env.VITE_DEV_SERVER_PORT
+    }
+    : undefined
 })

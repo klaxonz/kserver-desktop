@@ -1,4 +1,4 @@
-import { app, BrowserWindow, shell, ipcMain, session } from 'electron'
+import { app, BrowserWindow, shell, ipcMain, session, Menu } from 'electron'
 import { release } from 'os'
 import { join } from 'path'
 
@@ -22,7 +22,7 @@ export const ROOT_PATH = {
   // /dist
   dist: join(__dirname, '../..'),
   // /dist or /public
-  public: join(__dirname, app.isPackaged ? '../..' : '../../../public'),
+  public: join(__dirname, app.isPackaged ? '../..' : '../../../public')
 }
 
 let win: BrowserWindow | null = null
@@ -32,6 +32,7 @@ const url = process.env.VITE_DEV_SERVER_URL as string
 const indexHtml = join(ROOT_PATH.dist, 'index.html')
 
 async function createWindow() {
+  // Menu.setApplicationMenu(null);
   win = new BrowserWindow({
     title: 'Main window',
     icon: join(ROOT_PATH.public, 'favicon.ico'),
@@ -41,7 +42,7 @@ async function createWindow() {
       nodeIntegration: true,
       contextIsolation: false,
       webviewTag: true
-    },
+    }
   })
 
   if (app.isPackaged) {
@@ -64,9 +65,14 @@ async function createWindow() {
   })
 }
 
-app.whenReady().then(createWindow).then(async () => {
-  await session.defaultSession.loadExtension('C:\\Users\\MSN\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\6.5.0_0')
-})
+app
+  .whenReady()
+  .then(createWindow)
+  .then(async () => {
+    await session.defaultSession.loadExtension(
+      'C:\\Users\\MSN\\AppData\\Local\\Microsoft\\Edge\\User Data\\Default\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\6.5.0_0'
+    )
+  })
 
 app.on('window-all-closed', () => {
   win = null
@@ -94,8 +100,8 @@ app.on('activate', () => {
 ipcMain.handle('open-win', (event, arg) => {
   const childWindow = new BrowserWindow({
     webPreferences: {
-      preload,
-    },
+      preload
+    }
   })
 
   if (app.isPackaged) {

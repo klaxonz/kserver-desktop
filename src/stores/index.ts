@@ -1,5 +1,6 @@
 // src/stores/index.ts
 import { defineStore } from 'pinia'
+import { WebPage, WebPageCategory } from '@/type/webPage'
 
 const defaultWebpage: WebPage = {
   id: 0,
@@ -20,20 +21,20 @@ const defaultWebpage: WebPage = {
 const categoryState: Array<WebPageCategory> = [
   {
     num: 0,
-    name: "所有",
-    type: "all",
+    name: '所有',
+    type: 'all',
     selected: true
   },
   {
     num: 0,
-    name: "星标",
-    type: "star",
+    name: '星标',
+    type: 'star',
     selected: false
   },
   {
     num: 0,
-    name: "今日",
-    type: "today",
+    name: '今日',
+    type: 'today',
     selected: false
   }
 ]
@@ -64,12 +65,12 @@ export const useWebpageStore = defineStore({
   }),
   getters: {
     checkNum(): number {
-      return this.webpageList.filter(item => item.checked).length
+      return this.webpageList.filter((item) => item.checked).length
     },
-    checkAll(): Boolean {
-      return this.webpageList.filter(item => item.checked).length == this.webpageList.length
+    checkAll(): boolean {
+      return this.webpageList.filter((item) => item.checked).length == this.webpageList.length
     },
-    checkAllVisible(): Boolean {
+    checkAllVisible(): boolean {
       return this.checkNum > 0
     }
   },
@@ -77,8 +78,8 @@ export const useWebpageStore = defineStore({
     change(text: string) {
       this.text = text
     },
-    changeCategory(caregory: WebPageCategory) {
-      this.activatedCategory = caregory
+    changeCategory(category: WebPageCategory) {
+      this.activatedCategory = category
     },
     clearWebpageList() {
       this.webpageList = []
@@ -89,11 +90,11 @@ export const useWebpageStore = defineStore({
     addWebpageList(list: WebPage[]) {
       this.webpageList.push(...list)
     },
-    updateCheckAll(checked: Boolean) {
+    updateCheckAll(checked: boolean) {
       if (checked) {
-        this.webpageList.forEach(item => item.checked = true)
+        this.webpageList.forEach((item) => (item.checked = true))
       } else {
-        this.webpageList.forEach(item => item.checked = false)
+        this.webpageList.forEach((item) => (item.checked = false))
       }
     }
   }
