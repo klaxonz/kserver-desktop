@@ -22,7 +22,7 @@ class WebPage {
     this.groupId = groupId
     this.url = url
     ;(this.source = source),
-      (this.title = title),
+    (this.title = title),
       (this.description = description),
       (this.createTime = createTime),
       (this.updateTime = updateTime)
