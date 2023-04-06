@@ -32,9 +32,8 @@
 </template>
 
 <script setup lang="ts">
-import { Star, Delete } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
-import { webpageApi } from '@/api/web-page'
+import { webPageApi } from '@/api/web-page'
 import { message } from '@/utils/message'
 import { useWebpageStore } from '@/stores'
 import { getWebpageCardList, getDetail } from '@/interf/webpage'
@@ -53,7 +52,7 @@ function batchDeleteWebpageCard() {
     confirmButtonText: '确认'
   }).then(async () => {
     const ids = store.webpageList.filter((e) => e.checked).map((e) => e.id)
-    await webpageApi.batchDelete(ids)
+    await webPageApi.batchDelete(ids)
     await getDetail()
 
     store.page = 1

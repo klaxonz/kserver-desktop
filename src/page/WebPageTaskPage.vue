@@ -118,12 +118,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 import WebPageTaskDrawer from '@/components/web-page/WebPageTaskDrawer.vue'
 import DPlayer from 'dplayer'
 import { nextTick } from 'process'
 import 'moment/dist/locale/zh-cn'
-import { taskApi } from '@/api/task'
+import { taskApi } from '@/api/web-page-task'
+import config from '@/config'
 
 class WebPageTask {
   thumbnail: string
@@ -235,7 +236,7 @@ class WebSocketClient {
 }
 
 onMounted(() => {
-  new WebSocketClient('ws://localhost:9001/ws/task/list?token=' + token, 5000)
+  new WebSocketClient(config.getWebSocketRequestPath() + '/ws/task/list?token=' + token, 5000)
 })
 
 let dp: DPlayer
@@ -249,7 +250,7 @@ function handlePlay(task: any) {
       container: videoRef.value,
       autoplay: true,
       video: {
-        url: 'http://127.0.0.1:9001/web-page-task/video/' + task.webPageTask.id
+        url: config.getHttpRequestPath() + '/web-page-task/video/' + task.webPageTask.id
       }
     }
     dp = new DPlayer(options)

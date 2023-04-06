@@ -38,23 +38,23 @@
 
 <script setup lang="ts">
 import { useWebpageStore } from '@/stores'
-import { webpageApi } from '@/api/web-page'
+import { webPageApi } from '@/api/web-page'
 import { getDetail, getWebpageCardList } from '@/interf/webpage'
 
 const store = useWebpageStore()
 
 async function addWebPageUrl() {
-  await webpageApi
+  await webPageApi
     .create({
       url: store.sourceUrl
     })
     .finally(() => {
       store.addWebPageModalVisible = false
     })
-  getDetail()
+  await getDetail()
   store.page = 1
   const page = store.page
-  getWebpageCardList(page)
+  await getWebpageCardList(page)
 }
 </script>
 

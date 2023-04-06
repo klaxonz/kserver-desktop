@@ -5,7 +5,8 @@
         v-model="store.text"
         class="h-36px w-500px rounded-md pl-2 outline-gray-200"
         placeholder="搜索"
-        @enter="searchWebpage"
+        @input="searchWebpage"
+        @keyup.enter="searchWebpage"
       >
         <template #prepend>
           <el-button icon="search" />

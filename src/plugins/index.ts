@@ -15,7 +15,7 @@ export class Request {
   // axios 实例
   instance: AxiosInstance
   // 基础配置，url和超时时间
-  baseConfig: AxiosRequestConfig = { baseURL: `${config.url}/`, timeout: 60000 }
+  baseConfig: AxiosRequestConfig = { baseURL: `${config.getHttpRequestPath()}/`, timeout: 60000 }
 
   constructor(config: AxiosRequestConfig) {
     // 使用axios.create创建axios实例，配置为基础配置和我们传递进来的配置

@@ -4,13 +4,14 @@ specifiers:
   '@babel/core': ^7.21.4
   '@babel/eslint-parser': ^7.21.3
   '@element-plus/icons-vue': ^2.0.10
+  '@types/dplayer': ^1.25.2
   '@types/validator': ^13.7.6
   '@typescript-eslint/eslint-plugin': ^5.57.1
   '@typescript-eslint/parser': ^5.57.1
   '@vitejs/plugin-vue': ^3.0.1
   '@vue/devtools': ^6.2.1
   '@vueuse/components': ^9.10.0
-  '@vueuse/core': ^9.10.0
+  '@vueuse/core': ^9.11.1
   axios: ^0.27.2
   dplayer: ^1.27.1
   electron: ^23.2.1
@@ -57,6 +58,7 @@ dependencies:
 devDependencies:
   '@babel/core': 7.21.4
   '@babel/eslint-parser': 7.21.3_dhamhndlncf2tcatgsqqhydwfi
+  '@types/dplayer': 1.25.2
   '@types/validator': 13.7.10
   '@typescript-eslint/eslint-plugin': 5.57.1_patbzwxisgy7caqbltqi7q7uni
   '@typescript-eslint/parser': 5.57.1_k56kvznmblnydbzava6omkcjfu
@@ -641,6 +643,10 @@ packages:
     resolution: {integrity: sha512-9AonUzyTjXXhEOa0DnqpzZi6VHlqKMswga9EXjpXnnqxwLtdvPPtlO8evrI5D9S6asFRCQ6v+wpiUKbw+vKqyg==}
     dependencies:
       '@types/ms': 0.7.31
+    dev: true
+
+  /@types/dplayer/1.25.2:
+    resolution: {integrity: sha512-bkTVZkK3Vi7N7eX2FUBnqKhCjTaeRLkhvY8H6zolatbSTtjPPdxyUzhE3C29sIBYRRq1kQHSduFgCHKg5VF3Jw==}
     dev: true
 
   /@types/eslint/8.37.0:

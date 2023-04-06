@@ -43,8 +43,7 @@ import { message } from '@/utils/message'
 
 import { useWebpageStore } from '@/stores'
 import { ElMessageBox } from 'element-plus'
-import { webpageApi } from '@/api/web-page'
-import { View, Link, DeleteFilled } from '@element-plus/icons-vue'
+import { webPageApi } from '@/api/web-page'
 import { getDetail, getWebpageCardList } from '@/interf/webpage'
 
 const store = useWebpageStore()
@@ -81,7 +80,7 @@ function deleteCard(id: any) {
     cancelButtonText: '取消',
     confirmButtonText: '确认'
   }).then(async () => {
-    await webpageApi.delete({ id: id })
+    await webPageApi.delete({ id: id })
     getDetail()
 
     store.page = 1

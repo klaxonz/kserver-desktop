@@ -1,6 +1,6 @@
 import request from '../plugins/index'
 
-export const webpageApi = {
+export const webPageApi = {
   create: (data: any) => {
     return request.post('web-page/create', data)
   },

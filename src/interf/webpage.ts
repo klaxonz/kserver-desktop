@@ -1,5 +1,5 @@
 import { useWebpageStore } from '@/stores'
-import { webpageApi } from '@/api/web-page'
+import { webPageApi } from '@/api/web-page'
 const store = useWebpageStore()
 
 export async function getWebpageCardList(page: number, pageSize?: number) {
@@ -8,7 +8,7 @@ export async function getWebpageCardList(page: number, pageSize?: number) {
   const searchText = store.text
   const category = store.activatedCategory.type
 
-  const data = await webpageApi.list(
+  const data = await webPageApi.list(
     {
       type: category,
       page: page,
@@ -25,7 +25,7 @@ export async function getWebpageCardList(page: number, pageSize?: number) {
 }
 
 export async function getDetail() {
-  const { data } = await webpageApi.count()
+  const { data } = await webPageApi.count()
   for (let i = 0; i < store.categoryState.length; i++) {
     if (store.categoryState[i].type === 'all') {
       store.categoryState[i].num = data.data.allTotal
