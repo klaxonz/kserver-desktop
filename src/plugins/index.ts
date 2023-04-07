@@ -10,22 +10,15 @@ type Result<T> = {
   timestamp: Date
 }
 
-// 导出Request，可以用来自定义传递配置来创建实例
 export class Request {
-  // axios 实例
   instance: AxiosInstance
-  // 基础配置，url和超时时间
   baseConfig: AxiosRequestConfig = { baseURL: `${config.getHttpRequestPath()}/`, timeout: 60000 }
 
   constructor(config: AxiosRequestConfig) {
-    // 使用axios.create创建axios实例，配置为基础配置和我们传递进来的配置
     this.instance = axios.create(Object.assign(this.baseConfig, config))
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     this.instance.interceptors.request.use(
       (config: AxiosRequestConfig) => {
-        // 一般会请求拦截里面加token，用于后端的验证
         const token = localStorage.getItem('token') as string
         if (token) {
           config.headers!.authorization = token
@@ -34,26 +27,22 @@ export class Request {
         return config
       },
       (err: any) => {
-        // 请求错误，这里可以用全局提示框进行提示
         return Promise.reject(err)
       }
     )
 
     this.instance.interceptors.response.use(
       (res: AxiosResponse) => {
-        // 直接返回res，当然你也可以只返回res.data
         if (res.data.code !== '0000000') {
           return Promise.reject(res)
         }
         if (res.headers.authorization) {
           localStorage.setItem('token', res.headers.authorization)
         }
-        // 系统如果有自定义code也可以在这里处理
         return res
       },
       (err: any) => {
         this.handleResponse(err)
-        // 这里是AxiosError类型，所以一般我们只reject我们需要的响应即可
         return Promise.reject(err.response)
       }
     )
@@ -87,7 +76,6 @@ export class Request {
     } else {
       message = `连接出错(${error.response.status})!`
     }
-    // 这里错误消息可以使用全局弹框展示出来
     ElMessage({
       showClose: true,
       message: `${message}，请检查网络或联系管理员！`,
@@ -95,7 +83,6 @@ export class Request {
     })
   }
 
-  // 定义请求方法
   public request(config: AxiosRequestConfig): Promise<AxiosResponse> {
     return this.instance.request(config)
   }
@@ -117,5 +104,4 @@ export class Request {
   }
 }
 
-// 默认导出Request实例
 export default new Request({})

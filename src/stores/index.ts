@@ -1,6 +1,6 @@
 // src/stores/index.ts
 import { defineStore } from 'pinia'
-import { WebPage, WebPageCategory } from '@/type/webPage'
+import { WebPage, WebPageCategory } from '@/type/web-page'
 
 const defaultWebpage: WebPage = {
   id: 0,

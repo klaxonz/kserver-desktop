@@ -2,7 +2,7 @@
   <div class="w-80px flex flex-col justify-between bg-gray-200">
     <div class="container mt-5">
       <div
-        v-for="nav in topNavs"
+        v-for="nav in topNav"
         :key="nav.name"
         class="h-48px w-60px mx-auto mb-2 flex justify-center items-center hover:bg-gray-300 cursor-pointer rounded-md"
         :class="{ 'bg-gray-300': nav.selected }"
@@ -13,7 +13,7 @@
     </div>
     <div class="container mt-5">
       <div
-        v-for="nav in bottomNavs"
+        v-for="nav in bottomNav"
         :key="nav.name"
         class="h-48px w-60px mx-auto mb-2 flex justify-center items-center hover:bg-gray-300 cursor-pointer rounded-md"
         :class="{ 'bg-gray-300': nav.selected }"
@@ -28,74 +28,71 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue'
 import { useRouter } from 'vue-router'
-import { accountApi } from '@/api/account'
-import { WebPageSideBarNav } from '@/type/webPage'
+import { WebPageSideBarNav } from '@/type/web-page'
 
 const router = useRouter()
-
-const topNavs = reactive<Array<WebPageSideBarNav>>([
+const sidebarNav = reactive<Array<WebPageSideBarNav>>([
   {
     name: '收藏',
     label: 'collect',
-    selected: true
+    selected: true,
+    position: 'top',
+    route: '/webpage/collect'
   },
   {
     name: '任务',
     label: 'task',
-    selected: false
+    selected: false,
+    position: 'top',
+    route: '/webpage/task'
   },
   {
     name: '标签',
     label: 'tag',
-    selected: false
+    selected: false,
+    position: 'top',
+    route: ''
   },
   {
     name: '归档',
     label: 'archive',
-    selected: false
-  }
-])
-
-const bottomNavs = reactive<Array<WebPageSideBarNav>>([
+    selected: false,
+    position: 'top',
+    route: ''
+  },
   {
     name: '账户',
     label: 'account',
-    selected: false
+    selected: false,
+    position: 'bottom',
+    route: ''
   },
   {
     name: '设置',
     label: 'setting',
-    selected: false
+    selected: false,
+    position: 'bottom',
+    route: ''
   }
 ])
 
+const topNav = sidebarNav.filter((item) => item.position === 'top')
+const bottomNav = sidebarNav.filter((item) => item.position === 'bottom')
+
 onMounted(() => {
-  topNavs.forEach((item) => {
-    if (!item.selected) {
-      return
-    }
-    if (item.label === 'collect') {
-      router.push('/webpage/collect')
-    }
-    if (item.label === 'task') {
-      router.push('/webpage/task')
+  sidebarNav.forEach((item) => {
+    if (item.selected && item.route !== '') {
+      router.push(item.route)
     }
   })
 })
-
 function handleNavClick(nav: WebPageSideBarNav) {
-  topNavs.forEach((item) => (item.selected = item.label === nav.label))
-  bottomNavs.forEach((item) => (item.selected = item.label === nav.label))
-  if (nav.label === 'collect') {
-    router.push('/webpage/collect')
-  }
-  if (nav.label === 'task') {
-    router.push('/webpage/task')
-  }
-  if (nav.label === 'account') {
-    accountApi.logout()
-    router.push('/')
-  }
+  sidebarNav.forEach((item) => (item.selected = item.label === nav.label))
+  sidebarNav.forEach((item) => {
+    if (item.selected && item.route !== '') {
+      router.push(item.route)
+    }
+  })
 }
 </script>
 

@@ -21,9 +21,9 @@ module.exports = {
   plugins: ['vue', '@typescript-eslint'],
   rules: {
     indent: ['error', 2],
-    'linebreak-style': ['error', 'unix'],
     quotes: ['error', 'single'],
     semi: ['error', 'never'],
+    'linebreak-style': ['error', 'unix'],
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off'
   }

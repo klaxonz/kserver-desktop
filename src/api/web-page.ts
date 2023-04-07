@@ -1,4 +1,12 @@
 import request from '../plugins/index'
+import { WebPage, WebPageDrawerNavDetail } from '@/type/web-page'
+
+interface PageValue<T> {
+  page: number
+  size: number
+  total: number
+  list: T[]
+}
 
 export const webPageApi = {
   create: (data: any) => {
@@ -11,13 +19,9 @@ export const webPageApi = {
     return request.post('web-page/batch-delete', data)
   },
   count: () => {
-    return request.get('web-page/count')
+    return request.get<WebPageDrawerNavDetail>('web-page/count')
   },
-  list: (data: any, q?: string) => {
-    let api = 'web-page/list'
-    if (q) {
-      api += `?q=${q}`
-    }
-    return request.post(api, data)
+  list: (data: any) => {
+    return request.post<PageValue<WebPage>>('web-page/list', data)
   }
 }

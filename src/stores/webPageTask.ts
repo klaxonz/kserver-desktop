@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { WebPageTaskCategory } from '@/type/webPage'
+import { WebPageTaskCategory } from '@/type/web-page'
 
 const categoryState: Array<WebPageTaskCategory> = [
   {

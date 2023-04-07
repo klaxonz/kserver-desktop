@@ -2,16 +2,16 @@
   <transition name="contexmenu">
     <div
       v-if="store.visible"
-      class="absolute h-120px w-140px bg-light-50 rounded-md shadow-md text-sm text-gray-500 pt-4px overflow-hidden"
+      class="absolute h-120px w-160px bg-light-50 shadow-xl rounded-md shadow-md text-sm text-gray-500 pt-4px overflow-hidden"
       :style="{ top: store.top + 'px', left: store.left + 'px', zIndex: 1000 }"
     >
       <div
-        class="hover:bg-gray-200 hover:rounded-md hover:cursor-pointer h-30px flex justify-start items-center ml-6px mr-4px mt-4px"
+        class="hover:bg-gray-200 hover:rounded-md hover:cursor-pointer h-30px flex justify-start items-center ml-6px mr-4px mt-8px"
         @click="openUrl(store.webpage.url)"
       >
         <div class="flex justify-start items-center">
-          <View style="width: 1.2em; height: 1.2em; margin-left: 12px; margin-right: 8px" />
-          <p class="ml-4px">访问网页</p>
+          <View style="width: 1em; height: 1em; margin-left: 10px" />
+          <p class="ml-10px">访问网页</p>
         </div>
       </div>
       <div
@@ -19,17 +19,17 @@
         @click="copyUrl(store.webpage.url)"
       >
         <div class="flex justify-start items-center">
-          <Link style="width: 1.2em; height: 1.2em; margin-left: 12px; margin-right: 8px" />
-          <p class="ml-4px">复制链接</p>
+          <Link style="width: 1em; height: 1em; margin-left: 10px" />
+          <p class="ml-10px">复制链接</p>
         </div>
       </div>
       <div
         class="hover:bg-gray-200 hover:rounded-md hover:cursor-pointer h-30px flex justify-start items-center ml-6px mr-4px mt-4px"
-        @click="deleteCard(store.webpage.id)"
+        @click="deleteCard(store.webpage)"
       >
         <div class="flex justify-start items-center">
-          <DeleteFilled style="width: 1.2em; height: 1.2em; margin-left: 12px; margin-right: 8px" />
-          <p class="ml-4px">删除收藏</p>
+          <DeleteFilled style="width: 1em; height: 1em; margin-left: 10px" />
+          <p class="ml-10px">删除收藏</p>
         </div>
       </div>
     </div>
@@ -44,9 +44,11 @@ import { message } from '@/utils/message'
 import { useWebpageStore } from '@/stores'
 import { ElMessageBox } from 'element-plus'
 import { webPageApi } from '@/api/web-page'
-import { getDetail, getWebpageCardList } from '@/interf/webpage'
+import { WebPage } from '@/type/web-page'
 
 const store = useWebpageStore()
+
+const emit = defineEmits(['delete-card'])
 
 function openUrl(url: string) {
   store.dialogVisible = true
@@ -74,23 +76,8 @@ function copyUrl(url: string) {
   message.success('链接已成功复制到粘贴板')
 }
 
-function deleteCard(id: any) {
-  ElMessageBox.confirm('确认删除卡片吗?', '警告', {
-    type: 'warning',
-    cancelButtonText: '取消',
-    confirmButtonText: '确认'
-  }).then(async () => {
-    await webPageApi.delete({ id: id })
-    getDetail()
-
-    store.page = 1
-    const page = store.page
-    getWebpageCardList(page)
-
-    closeContentMenu()
-
-    message.success('删除成功')
-  })
+function deleteCard(webpage: WebPage) {
+  emit('delete-card', webpage)
 }
 
 function closeContentMenu() {
@@ -99,21 +86,13 @@ function closeContentMenu() {
 </script>
 
 <style>
-.bg-my {
-  background: aqua;
-}
-
 .contexmenu-enter-active {
   animation: contexmenu-in 0.2s;
 }
 
-.contexmenu-leave-active {
-  animation: contexmenu-in 0.2s reverse;
-}
-
 @keyframes contexmenu-in {
   from {
-    height: 0px;
+    height: 0;
   }
 
   to {

@@ -39,7 +39,6 @@
 <script setup lang="ts">
 import { useWebpageStore } from '@/stores'
 import { webPageApi } from '@/api/web-page'
-import { getDetail, getWebpageCardList } from '@/interf/webpage'
 
 const store = useWebpageStore()
 
@@ -51,10 +50,10 @@ async function addWebPageUrl() {
     .finally(() => {
       store.addWebPageModalVisible = false
     })
-  await getDetail()
+  // await getDetail()
   store.page = 1
   const page = store.page
-  await getWebpageCardList(page)
+  // await getWebpageCardList(page)
 }
 </script>
 

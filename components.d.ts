@@ -7,6 +7,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    BaseLayout: typeof import('./src/components/common/BaseLayout.vue')['default']
     BookReader: typeof import('./src/components/BookReader.vue')['default']
     copy: typeof import('./src/components/webpage/WebPageDrawer copy.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
@@ -36,6 +37,9 @@ declare module '@vue/runtime-core' {
     WebPageContentHeader: typeof import('./src/components/web-page/WebPageContentHeader.vue')['default']
     WebPageContentOperation: typeof import('./src/components/web-page/WebPageContentOperation.vue')['default']
     WebPageDrawer: typeof import('./src/components/web-page/WebPageDrawer.vue')['default']
+    WebPageDrawer1: typeof import('./src/components/web-page/WebPageDrawer1.vue')['default']
+    WebPageDrawerNav: typeof import('./src/components/web-page/WebPageDrawerNav.vue')['default']
+    WebPageDrawerTitle: typeof import('./src/components/web-page/WebPageDrawerTitle.vue')['default']
     WebPageLeftSide: typeof import('./src/components/webpage/WebPageLeftSide.vue')['default']
     WebPageResource: typeof import('./src/components/WebPageResource.vue')['default']
     WebPageSideBar: typeof import('./src/components/common/WebPageSideBar.vue')['default']

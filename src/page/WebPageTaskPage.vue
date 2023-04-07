@@ -1,12 +1,5 @@
 <template>
-  <div
-    class="flex flex-row h-full w-full"
-    style="
-      font-family: PingFang SC, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-        Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol,
-        Noto Color Emoji;
-    "
-  >
+  <div class="flex flex-row h-full w-full">
     <WebPageTaskDrawer></WebPageTaskDrawer>
 
     <div class="w-full h-full overflow-scroll static" style="background-color: #edeff3">

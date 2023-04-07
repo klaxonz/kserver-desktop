@@ -2,6 +2,8 @@ export interface WebPageSideBarNav {
   name: string
   label: string
   selected: boolean
+  position: string
+  route: string
 }
 
 export interface WebPageCategory {
@@ -46,4 +48,17 @@ export interface WebPageTaskCategory {
   name: string
   type: string
   selected: boolean
+}
+
+export interface WebPageDrawerNavType {
+  num: number
+  name: string
+  label: string
+  selected: boolean
+}
+
+export interface WebPageDrawerNavDetail {
+  all: number
+  star: number
+  today: number
 }

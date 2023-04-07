@@ -2,11 +2,11 @@
   <div class="flex justify-between">
     <div class="w-500px">
       <el-input
-        v-model="store.text"
+        v-model="computeQuery"
         class="h-36px w-500px rounded-md pl-2 outline-gray-200"
         placeholder="搜索"
-        @input="searchWebpage"
-        @keyup.enter="searchWebpage"
+        @input="input"
+        @keyup.enter="search"
       >
         <template #prepend>
           <el-button icon="search" />
@@ -21,14 +21,34 @@
 
 <script setup lang="ts">
 import { useWebpageStore } from '@/stores'
-import { getWebpageCardList } from '@/interf/webpage'
+import { computed } from 'vue'
 
 const store = useWebpageStore()
+
+const emit = defineEmits(['update:query', 'search', 'input'])
+const props = defineProps({
+  query: String
+})
+const computeQuery = computed({
+  get() {
+    return props.query
+  },
+  set(value) {
+    emit('update:query', value)
+  }
+})
+
+function search() {
+  emit('search')
+}
+
+function input() {
+  emit('input')
+}
 
 function searchWebpage() {
   store.page = 1
   const page = store.page
-  getWebpageCardList(page)
 }
 
 function showAddWebPageUrlModal() {

@@ -3,15 +3,12 @@
     v-click-outside-element="handleBlurCard"
     class="h-200px rounded-2xl cursor-pointer hover:shadow-md"
     :class="{
-      'border-r-3px': webpageState?.checked,
-      'bg-blue-400': webpageState?.checked,
-      'bg-opacity-25': webpageState?.checked,
-      'bg-light-100': !webpageState?.checked
+      'border-r-3px': webpage.checked,
+      'bg-blue-400': webpage.checked,
+      'bg-opacity-25': webpage.checked,
+      'bg-light-100': !webpage.checked
     }"
-    @click.right="handleRightClickCard($event, webpageState?.id)"
-    @click.left="handleLeftClickCard($event, webpageState?.id)"
-    @mouseenter="handleMouseEnterCard($event, webpageState?.id)"
-    @mouseleave="handleMouseLeaveCard($event, webpageState?.id)"
+    @click.right="handleRightClickCard($event, webpage)"
   >
     <div class="h-full w-full">
       <div class="h-full flex-col">
@@ -50,9 +47,9 @@
           </div>
           <div
             class="w-24px mr-4 mt-2"
-            :class="{ visible: webpageState?.checkboxVisible, invisible: !webpageState?.checkboxVisible }"
+            :class="{ visible: webpage.checkboxVisible, invisible: !webpage.checkboxVisible }"
           >
-            <el-checkbox v-model="_check" @change="handleCheckboxChange(webpageState?.id)" />
+            <el-checkbox v-model="selected" />
           </div>
         </div>
         <div
@@ -60,10 +57,10 @@
           style="background-color: #f6f7f9; color: #6d7582"
         >
           <div class="flex justify-between">
-            <img :src="webpageState?.favicon" class="h-16px w-16px" />
-            <p class="ml-8px">{{ getHost(webpageState?.source) }}</p>
+            <img :src="webpage.favicon" class="h-16px w-16px" />
+            <p class="ml-8px">{{ getHost(webpage.source) }}</p>
           </div>
-          <div>{{ getFormateTime(webpageState?.createTime) }}</div>
+          <div>{{ getFormatTime(webpage.createTime) }}</div>
         </div>
       </div>
     </div>
@@ -73,44 +70,30 @@
 <script setup lang="ts">
 import moment from 'moment'
 import 'moment/dist/locale/zh-cn'
-import { nextTick, PropType, ref } from 'vue'
+import { computed, nextTick, PropType } from 'vue'
 import { useWebpageStore } from '@/stores'
-import { WebPage } from '@/type/webPage'
+import { WebPage } from '@/type/web-page'
 
 const props = defineProps({
   webpage: {
-    type: Object as PropType<WebPage>
+    type: Object as PropType<WebPage>,
+    required: true
   }
 })
 
-// eslint-disable-next-line vue/no-setup-props-destructure
-const webpageState = props.webpage
-const _check = ref(webpageState?.checked)
-
-defineEmits(['update-check'])
+const emit = defineEmits(['update-check'])
+const selected = computed({
+  get() {
+    return props.webpage.checked
+  },
+  set(value) {
+    emit('update-check', value)
+  }
+})
 
 const store = useWebpageStore()
 
-function handleLeftClickCard(event: Event, refId: number | undefined) {
-  if (refId === undefined) {
-    return
-  }
-  if (store.checkAllVisible) {
-    store.webpageList.forEach((item) => {
-      if (refId === item.id) {
-        item.checked = !item.checked
-        event.preventDefault()
-      }
-    })
-  }
-}
-
-function handleRightClickCard(event: MouseEvent, refId: number | undefined) {
-  if (refId === undefined) {
-    return
-  }
-  const webpage = getWebpage(refId)
-
+function handleRightClickCard(event: MouseEvent, webpage: WebPage) {
   if (store.visible) {
     store.visible = false
     nextTick(() => {
@@ -127,74 +110,18 @@ function handleRightClickCard(event: MouseEvent, refId: number | undefined) {
       store.left = event.x
     }
   }
-  if (webpage) {
-    store.webpage = webpage
-  }
-}
-
-function handleMouseEnterCard(event: Event, refId: number | undefined) {
-  if (refId === undefined) {
-    return
-  }
-  store.webpageList.forEach((item) => {
-    if (refId === item.id) {
-      if (!item.checkboxVisible) {
-        item.checkboxVisible = true
-      }
-      if (item.checked) {
-        item.checkboxVisible = true
-      }
-    }
-  })
-}
-
-function handleMouseLeaveCard(event: Event, refId: number | undefined) {
-  if (refId === undefined) {
-    return
-  }
-
-  if (!store.checkAllVisible) {
-    store.webpageList.forEach((item) => {
-      if (refId === item.id) {
-        if (item.checkboxVisible && !item.checked) {
-          item.checkboxVisible = false
-        }
-      }
-    })
-  }
-}
-
-function handleCheckboxChange(refId: number | undefined) {
-  if (refId === undefined) {
-    return
-  }
-  store.webpageList.forEach((item) => {
-    if (refId === item.id && item.checked) {
-      console.log(item)
-      item.checkboxVisible = true
-    }
-  })
+  store.webpage = webpage
 }
 
 function handleBlurCard() {
   store.visible = false
 }
 
-function getWebpage(refId: number) {
-  let webpage = null
-  store.webpageList.forEach((item) => {
-    if (item.id === refId) {
-      webpage = item
-    }
-  })
-  return webpage
-}
-
 function getHost(url: string) {
   return new URL(url).hostname
 }
 
-function getFormateTime(createTime?: string | undefined) {
+function getFormatTime(createTime?: string | undefined) {
   if (moment(createTime).year == moment(new Date()).year) {
     return moment.utc(createTime).utcOffset(0).calendar()
   } else {
