@@ -37,7 +37,7 @@
           </div>
         </div>
         <div
-          v-if="task.webPageTask.videoProgress / 100 != 100"
+          v-if="task.webPageTask.videoProgress / 100 !== 100"
           class="flex flex-col w-140px justify-center items-center ml-auto"
         >
           <div class="flex items-center">
@@ -51,8 +51,8 @@
         <div
           v-if="
             task.webPageTask.isMerge === 1 &&
-            task.webPageTask.videoProgress / 100 == 100 &&
-            task.webPageTask.audioProgress / 100 != 100
+            task.webPageTask.videoProgress / 100 === 100 &&
+            task.webPageTask.audioProgress / 100 !== 100
           "
           class="flex flex-col w-140px justify-center items-center ml-auto"
         >
@@ -65,10 +65,10 @@
         </div>
         <div
           v-if="
-            (task.webPageTask.isMerge === 0 && task.webPageTask.videoProgress / 100 == 100) ||
+            (task.webPageTask.isMerge === 0 && task.webPageTask.videoProgress / 100 === 100) ||
             (task.webPageTask.isMerge === 1 &&
-              task.webPageTask.videoProgress / 100 == 100 &&
-              task.webPageTask.audioProgress / 100 == 100)
+              task.webPageTask.videoProgress / 100 === 100 &&
+              task.webPageTask.audioProgress / 100 === 100)
           "
           class="flex flex-col w-140px justify-center items-center ml-auto"
         >
