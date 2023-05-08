@@ -2,95 +2,123 @@
   <div class="flex flex-row h-full w-full">
     <WebPageTaskDrawer></WebPageTaskDrawer>
 
-    <div class="w-full h-full overflow-scroll static" style="background-color: #edeff3">
+    <div class="w-full h-full overflow-y-scroll no-scrollbar static" style="background-color: #edeff3">
       <div class="h-100px"></div>
 
       <div
         v-for="task in state.taskList"
         :key="task.webPageTask?.id"
-        class="w-3/4 h-190px flex items-center gap-4 bg-light-100 rounded-md mx-auto mb-24px"
+        class="w-3/4 flex items-center flex-col gap-4 rounded-md mx-auto mb-8px"
       >
-        <div class="h-160px flex items-center">
-          <div class="w-280px h-160px bg-black ml-14px rounded-md relative cursor-pointer" @click="handlePlay(task)">
-            <img :src="task.thumbnail" class="rounded-md absolute inset-0 w-full h-full object-cover" />
-          </div>
-        </div>
-
-        <div class="h-160px w-11/20 flex flex-col text-sm">
-          <div class="flex mb-8px max-h-24 line-clamp-2">
-            <p class="text-base subpixel-antialiased font-semibold">{{ task.webPage.title }}</p>
-          </div>
-          <div class="flex">
-            <div class="flex items-center justify-between">
-              视频来源：
-              <img :src="task.webPage?.favicon" class="h-16px w-16px" />
+        <div class="w-full h-190px flex items-center gap-4 rounded-md mx-auto mb-4px bg-light-100">
+          <div class="h-160px flex items-center">
+            <div class="w-280px h-160px bg-black ml-14px rounded-md relative cursor-pointer" @click="handlePlay(task)">
+              <img :src="task.thumbnail" class="rounded-md absolute inset-0 w-full h-full object-cover" />
             </div>
           </div>
-          <div class="flex">
-            <div>视频时长：{{ secondsToTimeFormat(task.webPageTask.videoDuration) }}</div>
-          </div>
-          <div class="flex">
-            <div>视频大小：{{ formatBytes(parseInt(task.webPageTask.videoSize)) }}</div>
-          </div>
-          <div class="flex">
-            <div>创建时间：{{ task.webPageTask.createTime }}</div>
-          </div>
-        </div>
-        <div
-          v-if="task.webPageTask.videoProgress / 100 !== 100"
-          class="flex flex-col w-140px justify-center items-center ml-auto"
-        >
-          <div class="flex items-center">
-            <el-progress type="circle" :percentage="task.webPageTask.videoProgress / 100" :width="72" />
-          </div>
-          <div class="flex items-center mt-16px">
-            <div class="text-xs pl-6px text-neutral-700">正在下载视频</div>
-          </div>
-        </div>
 
-        <div
-          v-if="
-            task.webPageTask.isMerge === 1 &&
-            task.webPageTask.videoProgress / 100 === 100 &&
-            task.webPageTask.audioProgress / 100 !== 100
-          "
-          class="flex flex-col w-140px justify-center items-center ml-auto"
-        >
-          <div class="flex items-center">
-            <el-progress type="circle" :percentage="task.webPageTask.audioProgress / 100" :width="72" />
+          <div class="h-160px w-11/20 flex flex-col text-sm">
+            <div class="flex mb-8px max-h-24 line-clamp-2">
+              <p class="text-base subpixel-antialiased font-semibold">{{ task.webPage.title }}</p>
+            </div>
+            <div class="flex">
+              <div class="flex items-center justify-between">
+                视频来源：
+                <img :src="task.webPage?.favicon" class="h-16px w-16px" />
+              </div>
+            </div>
+            <div class="flex">
+              <div>视频时长：{{ secondsToTimeFormat(task.webPageTask.videoDuration) }}</div>
+            </div>
+            <div class="flex">
+              <div>视频大小：{{ formatBytes(parseInt(task.webPageTask.videoSize)) }}</div>
+            </div>
+            <div class="flex">
+              <div>创建时间：{{ task.webPageTask.createTime }}</div>
+            </div>
+
+            <div v-if="task.webPageTask.type === 1" class="flex mt-10px">
+              <div
+                v-if="task.webPageTask.type === 1 && task.taskVisible === 0"
+                class="w-full text-center cursor-pointer text-blue-500"
+                @click="task['taskVisible'] = 1"
+              >
+                展开
+              </div>
+              <div
+                v-if="task.webPageTask.type === 1 && task.taskVisible === 1"
+                class="w-full text-center cursor-pointer text-blue-500"
+                @click="task['taskVisible'] = 0"
+              >
+                收缩
+              </div>
+            </div>
           </div>
-          <div class="flex items-center mt-16px">
-            <div class="text-xs pl-6px text-neutral-700">正在下载音频</div>
+          <div v-if="task.webPageTask.status === 1" class="flex flex-col w-140px justify-center items-center ml-auto">
+            <div class="flex items-center">
+              <el-progress type="circle" :percentage="task.webPageTask.videoProgress / 100" :width="72" />
+            </div>
+            <div class="flex items-center mt-16px">
+              <div class="text-xs pl-6px text-neutral-700">正在下载视频</div>
+            </div>
+          </div>
+
+          <div v-if="task.webPageTask.status === 2" class="flex flex-col w-140px justify-center items-center ml-auto">
+            <div class="flex items-center">
+              <el-progress type="circle" :percentage="100" status="success" :width="72" />
+            </div>
+            <div class="flex items-center mt-16px">
+              <div class="text-xs pl-6px text-neutral-700">下载成功</div>
+            </div>
+          </div>
+          <div class="h-160px flex flex-col justify-center items-center pr-48px">
+            <div class="flex h-32px items-center mt-12px">
+              <div><el-button type="primary" text bg @click="handlePause(task)">暂停</el-button></div>
+            </div>
+            <div class="flex h-32px items-center mt-12px">
+              <div><el-button type="primary" text bg @click="handleRemove(task)">删除</el-button></div>
+            </div>
+            <div class="flex h-32px items-center mt-12px">
+              <div><el-button type="primary" text bg @click="handleRetry(task)">重试</el-button></div>
+            </div>
+            <div class="flex h-32px items-center mt-12px">
+              <div><el-button type="primary" text bg @click="handlePlay(task)">播放</el-button></div>
+            </div>
           </div>
         </div>
         <div
-          v-if="
-            (task.webPageTask.isMerge === 0 && task.webPageTask.videoProgress / 100 === 100) ||
-            (task.webPageTask.isMerge === 1 &&
-              task.webPageTask.videoProgress / 100 === 100 &&
-              task.webPageTask.audioProgress / 100 === 100)
-          "
-          class="flex flex-col w-140px justify-center items-center ml-auto"
+          v-if="task.webPageTask.type === 1 && task.taskVisible === 1"
+          class="flex flex-col w-full h-600px bg-light-100 rounded-md mb-10px pt-4px pb-4px"
         >
-          <div class="flex items-center">
-            <el-progress type="circle" :percentage="100" status="success" :width="72" />
+          <div class="flex w-full mt-20px w-9/10 mx-auto border-b-solid border-b-1">
+            <div class="w-full text-center">名称</div>
+            <div class="w-full text-center">大小</div>
+            <div class="w-full text-center">时长</div>
+            <div class="w-full text-center">进度</div>
+            <div class="w-full text-center">操作</div>
           </div>
-          <div class="flex items-center mt-16px">
-            <div class="text-xs pl-6px text-neutral-700">下载成功</div>
-          </div>
-        </div>
-        <div class="h-160px flex flex-col justify-center items-center pr-48px">
-          <div class="flex h-32px items-center mt-12px">
-            <div><el-button type="primary" text bg @click="handlePause(task)">暂停</el-button></div>
-          </div>
-          <div class="flex h-32px items-center mt-12px">
-            <div><el-button type="primary" text bg @click="handleRemove(task)">删除</el-button></div>
-          </div>
-          <div class="flex h-32px items-center mt-12px">
-            <div><el-button type="primary" text bg @click="handleRetry(task)">重试</el-button></div>
-          </div>
-          <div class="flex h-32px items-center mt-12px">
-            <div><el-button type="primary" text bg @click="handlePlay(task)">播放</el-button></div>
+          <div class="overflow-y-scroll no-scrollbar">
+            <div
+              v-for="videoTask in task.webPageVideoTaskList"
+              :key="videoTask.id"
+              class="flex w-full mt-20px w-9/10 mx-auto"
+            >
+              <div class="w-full text-center truncate">{{ videoTask.title }}</div>
+              <div class="w-full text-center">{{ formatBytes(parseInt(videoTask.videoSize)) }}</div>
+              <div class="w-full text-center">{{ secondsToTimeFormat(videoTask.videoDuration) }}</div>
+              <div class="w-full text-center">
+                {{
+                  (
+                    ((videoTask.videoDownloadedLength + videoTask.audioDownloadedLength) /
+                      (videoTask.videoLength + videoTask.audioLength)) *
+                    100
+                  ).toFixed(2)
+                }}%
+              </div>
+              <div class="w-full text-center">
+                <el-button type="primary" text bg @click="handlePlay(videoTask)">播放</el-button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -111,7 +139,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { computed, createCommentVNode, onMounted, reactive, ref } from 'vue'
 import WebPageTaskDrawer from '@/components/web-page/WebPageTaskDrawer.vue'
 import DPlayer from 'dplayer'
 import { nextTick } from 'process'
@@ -163,6 +191,7 @@ class WebPageTask {
     height: number
     createTime: string
     updateTime: string
+    status: number
   }
 
   constructor(thumbnail: string, webPage?: any, webPageTask?: any) {
@@ -184,10 +213,10 @@ let state = reactive<{
 
 const widthFirst = computed(() => {
   if (state.playTask) {
-    if (state.playTask.webPageTask.width == null || state.playTask.webPageTask.height == null) {
+    if (state.playTask.width == null || state.playTask.height == null) {
       return true
     }
-    return state.playTask.webPageTask.width > state.playTask.webPageTask.height
+    return state.playTask.width > state.playTask.height
   } else {
     return true
   }
@@ -213,6 +242,20 @@ class WebSocketClient {
     this.socket.onmessage = (event) => {
       const dataStr = event.data
       const dataJson = JSON.parse(dataStr)
+
+      const oldTaskList = state.taskList
+
+      dataJson.data.forEach((item) => {
+        oldTaskList.forEach((oldItem) => {
+          if (item.webPageTask.id === oldItem.webPageTask.id) {
+            item.taskVisible = oldItem.taskVisible
+          }
+        })
+        if (!item.taskVisible) {
+          item.taskVisible = 0
+        }
+      })
+
       state.taskList = dataJson.data
     }
 
@@ -238,15 +281,27 @@ function handlePlay(task: any) {
   visible.value = true
   state.playTask = task
 
+  let url = config.getHttpRequestPath() + '/web-page-task/video/'
+  if (task.videoIndex) {
+    url = url + task.taskId + '/' + task.id
+  } else {
+    url = url + task.webPageTask.id
+  }
   nextTick(() => {
     const options = {
       container: videoRef.value,
       autoplay: true,
       video: {
-        url: config.getHttpRequestPath() + '/web-page-task/video/' + task.webPageTask.id
+        url: url
       }
     }
-    dp = new DPlayer(options)
+    if (dp) {
+      dp.switchVideo({
+        url: url
+      })
+    } else {
+      dp = new DPlayer(options)
+    }
     dp.play()
   })
 }
@@ -270,7 +325,7 @@ function handleRemove(task: any) {
 }
 
 function handleClose() {
-  dp.destroy()
+  dp.pause()
 }
 
 function formatBytes(bytes: number): string {

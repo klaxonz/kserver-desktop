@@ -10,13 +10,13 @@
     </web-page-drawer>
     <web-page-content>
       <div class="h-full ml-5 mr-5 mt-5 flex flex-col">
-        <WebPageContentHeader
+        <web-page-content-header
           :query="query"
           @update:query="(value) => (query = value)"
           @input="handleSearch"
           @search="handleSearch"
         />
-        <WebPageContentOperation
+        <web-page-content-operation
           :check-all="checkAll"
           :check-all-visible="checkAllVisible"
           :check-num="checkNum"
@@ -24,7 +24,7 @@
           @exit-more-operation="handleExitMoreOperation"
           @batch-delete-card="handleBatchDeleteCard"
         />
-        <WebPageContentCardList
+        <web-page-content-card-list
           :card-list="cardList"
           :check-all-visible="checkAllVisible"
           @update-card-check="handleCardCheckStateChange"

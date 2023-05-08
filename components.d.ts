@@ -24,6 +24,7 @@ declare module '@vue/runtime-core' {
     ElProgress: typeof import('element-plus/es')['ElProgress']
     ElStep: typeof import('element-plus/es')['ElStep']
     ElSteps: typeof import('element-plus/es')['ElSteps']
+    ElText: typeof import('element-plus/es')['ElText']
     LoginPage: typeof import('./src/components/LoginPage.vue')['default']
     RightClickMenu: typeof import('./src/components/webpage/RightClickMenu.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
