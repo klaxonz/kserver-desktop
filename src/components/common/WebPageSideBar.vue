@@ -40,6 +40,13 @@ const sidebarNav = reactive<Array<WebPageSideBarNav>>([
     route: '/webpage/collect'
   },
   {
+    name: '视频',
+    label: 'video',
+    selected: false,
+    position: 'top',
+    route: '/webpage/video'
+  },
+  {
     name: '任务',
     label: 'task',
     selected: false,

@@ -5,7 +5,7 @@ const webPageInterface = {
     const { data } = await webPageApi.count()
     return data.data
   },
-  getWebPageCardList: async (type: string, page: number, pageSize?: number, query?: string) => {
+  getWebPageCardList: async (type: number, page: number, pageSize?: number, query?: string) => {
     const requestBody = {
       type: type,
       page: page,

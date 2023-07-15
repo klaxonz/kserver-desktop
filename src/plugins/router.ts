@@ -13,6 +13,10 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/page/WebPageCollectPage.vue')
       },
       {
+        path: 'video',
+        component: () => import('@/page/VideoManagerPage.vue')
+      },
+      {
         path: 'task',
         component: () => import('@/page/WebPageTaskPage.vue')
       }

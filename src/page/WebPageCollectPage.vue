@@ -62,18 +62,21 @@ const store = useWebpageStore()
 const drawerNav = reactive([
   {
     num: 0,
+    type: 0,
     name: '所有',
     label: 'all',
     selected: true
   },
   {
     num: 0,
+    type: 1,
     name: '星标',
     label: 'star',
     selected: false
   },
   {
     num: 0,
+    type: 2,
     name: '今日',
     label: 'today',
     selected: false
@@ -109,10 +112,10 @@ function initSearchState() {
 
 function initDrawerDetail() {
   const drawerDetail = webPageInterface.getWebPageDrawerDetail()
-  drawerDetail.then((value) => {
-    drawerNav[0].num = value.all
-    drawerNav[1].num = value.star
-    drawerNav[2].num = value.today
+  drawerDetail.then((list) => {
+    drawerNav[0].num = list[0].count
+    drawerNav[1].num = list[1].count
+    drawerNav[2].num = list[2].count
   })
 }
 
@@ -121,7 +124,7 @@ function handleNavSelected() {
 }
 
 function handleSearch() {
-  const webPageCardList = webPageInterface.getWebPageCardList(selectedDrawerNav.value.label, 1, undefined, query.value)
+  const webPageCardList = webPageInterface.getWebPageCardList(selectedDrawerNav.value.type, 1, undefined, query.value)
   webPageCardList.then((value) => {
     cardList.length = 0
     cardList.push(...value.list)

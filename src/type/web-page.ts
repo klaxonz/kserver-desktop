@@ -58,7 +58,6 @@ export interface WebPageDrawerNavType {
 }
 
 export interface WebPageDrawerNavDetail {
-  all: number
-  star: number
-  today: number
+  type: number
+  count: number
 }

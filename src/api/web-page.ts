@@ -19,7 +19,7 @@ export const webPageApi = {
     return request.post('web-page/batch-delete', data)
   },
   count: () => {
-    return request.get<WebPageDrawerNavDetail>('web-page/count')
+    return request.get<Array<WebPageDrawerNavDetail>>('web-page/count')
   },
   list: (data: any) => {
     return request.post<PageValue<WebPage>>('web-page/list', data)
