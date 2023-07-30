@@ -28,8 +28,8 @@ import { WebPageDrawerNavType } from '@/type/web-page'
 const emit = defineEmits(['selected'])
 const props = defineProps({
   nav: {
-    type: Array as PropType<WebPageDrawerNavType[]>,
-    required: true
+    required: true,
+    type: Array as PropType<WebPageDrawerNavType[]>
   }
 })
 

@@ -54,16 +54,16 @@
               </div>
             </div>
           </div>
-          <div v-if="task.webPageTask.status === 1" class="flex flex-col w-140px justify-center items-center ml-auto">
+          <div v-if="task.webPageTask.status === 0" class="flex flex-col w-140px justify-center items-center ml-auto">
             <div class="flex items-center">
-              <el-progress type="circle" :percentage="task.webPageTask.videoProgress / 100" :width="72" />
+              <el-progress type="circle" :percentage="task.webPageTask.videoProgress" :width="72" />
             </div>
             <div class="flex items-center mt-16px">
               <div class="text-xs pl-6px text-neutral-700">正在下载视频</div>
             </div>
           </div>
 
-          <div v-if="task.webPageTask.status === 2" class="flex flex-col w-140px justify-center items-center ml-auto">
+          <div v-if="task.webPageTask.status === 1" class="flex flex-col w-140px justify-center items-center ml-auto">
             <div class="flex items-center">
               <el-progress type="circle" :percentage="100" status="success" :width="72" />
             </div>
@@ -106,15 +106,7 @@
               <div class="w-full text-center truncate">{{ videoTask.title }}</div>
               <div class="w-full text-center">{{ formatBytes(parseInt(videoTask.videoSize)) }}</div>
               <div class="w-full text-center">{{ secondsToTimeFormat(videoTask.videoDuration) }}</div>
-              <div class="w-full text-center">
-                {{
-                  (
-                    ((videoTask.videoDownloadedLength + videoTask.audioDownloadedLength) /
-                      (videoTask.videoLength + videoTask.audioLength)) *
-                    100
-                  ).toFixed(2)
-                }}%
-              </div>
+              <div class="w-full text-center">{{ videoTask.progress }}%</div>
               <div class="w-full text-center">
                 <el-button type="primary" text bg @click="handlePlay(videoTask)">播放</el-button>
               </div>
@@ -139,7 +131,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, createCommentVNode, onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import WebPageTaskDrawer from '@/components/web-page/WebPageTaskDrawer.vue'
 import DPlayer from 'dplayer'
 import { nextTick } from 'process'
@@ -192,6 +184,7 @@ class WebPageTask {
     createTime: string
     updateTime: string
     status: number
+    progress: number
   }
 
   constructor(thumbnail: string, webPage?: any, webPageTask?: any) {
@@ -212,6 +205,7 @@ let state = reactive<{
 })
 
 const widthFirst = computed(() => {
+  console.log(state.playTask)
   if (state.playTask) {
     if (state.playTask.width == null || state.playTask.height == null) {
       return true
@@ -279,7 +273,12 @@ let dp: DPlayer
 
 function handlePlay(task: any) {
   visible.value = true
-  state.playTask = task
+
+  if (task.width) {
+    state.playTask = task
+  } else {
+    state.playTask = task.webPageVideoTaskList[0]
+  }
 
   let url = config.getHttpRequestPath() + '/web-page-task/video/'
   if (task.videoIndex) {
